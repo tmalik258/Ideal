@@ -9,6 +9,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Mail, CheckCircle, Loader2, ArrowLeft } from 'lucide-react';
 import { toast } from 'sonner';
 import { createClient } from '@/lib/utils/supabase/client';
+import { SITE_EMAIL_SUPPORT } from '@/lib/site-metadata';
 
 function VerifyEmailContent() {
   const [isResending, setIsResending] = useState(false);
@@ -123,10 +124,10 @@ function VerifyEmailContent() {
             <div className="text-center text-sm text-gray-500">
               <p>Need help? Contact support at</p>
               <a 
-                href="mailto:support@hanara.com" 
+                href={`mailto:${SITE_EMAIL_SUPPORT}`} 
                 className="text-zinc-900 hover:underline"
               >
-                support@hanara.com
+                {SITE_EMAIL_SUPPORT}
               </a>
             </div>
           </div>

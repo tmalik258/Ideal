@@ -25,7 +25,7 @@ import {
   Star,
 } from 'lucide-react';
 import Image from 'next/image';
-import { LOGO_PATH, SITE_NAME } from '@/lib/site-metadata';
+import { LOGO_PATH, SITE_EMAIL_ADMIN, SITE_NAME } from '@/lib/site-metadata';
 
 interface NavItem {
   title: string;
@@ -99,7 +99,7 @@ export function AdminSidebar() {
     );
   }, [profile, user]);
 
-  const displayEmail = user?.email || 'admin@hanara.com';
+  const displayEmail = user?.email || SITE_EMAIL_ADMIN;
   const isProfileActive = pathname.startsWith('/admin/profile');
 
   const handleSignOut = useCallback(async () => {

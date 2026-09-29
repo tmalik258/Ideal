@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import { ErrorComponent } from "@/components/ui/error-component";
 import { ContactPageSkeleton } from "./_components/contact-page-skeleton";
+import { SITE_EMAIL_HELLO } from "@/lib/site-metadata";
 import { 
   MapPin, 
   Phone, 
@@ -39,7 +40,7 @@ const contactInfo = {
     country: "Pakistan",
   },
   phone: "+92 300 847 2653",
-  email: "hello@hanara.com",
+  email: SITE_EMAIL_HELLO,
   hours: {
     weekdays: "Monday - Friday: 10:00 AM - 7:00 PM PKT",
     weekends: "Saturday - Sunday: 11:00 AM - 5:00 PM PKT",
@@ -615,7 +616,7 @@ export default function ContactPage() {
                 Reach our support team by email during business hours
               </p>
               <Button asChild variant="outline" size="sm" className="cursor-pointer">
-                <Link href="mailto:hello@hanara.com">Email Support</Link>
+                <Link href={`mailto:${SITE_EMAIL_HELLO}`}>Email Support</Link>
               </Button>
             </CardContent>
           </Card>

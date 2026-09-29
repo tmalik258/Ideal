@@ -17,7 +17,7 @@ export type HomeSectionHeadings = Partial<Record<SectionHeadingKey, SectionHeadi
 export const DEFAULT_SECTION_HEADINGS: Record<SectionHeadingKey, SectionHeading> = {
   categories: {
     title: "Shop by category",
-    subtitle: "Explore curated drops across apparel, footwear, and everyday staples.",
+    subtitle: "Explore curated drops across dresses, layers, and everyday staples.",
   },
   editorial: {
     title: "Editor's picks",

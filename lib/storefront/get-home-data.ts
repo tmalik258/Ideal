@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { unstable_cache } from "next/cache";
-import { buildPageMetadata } from "@/lib/site-metadata";
+import { buildPageMetadata, SITE_NAME } from "@/lib/site-metadata";
 import { ReviewStatus } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import type { ProductWithRelations } from "@/lib/hooks/useProductQueries";
@@ -9,6 +9,7 @@ import {
   HOME_PAGE_REVALIDATE_SECONDS,
   HOME_PRODUCTS_CACHE_TAG,
   STOREFRONT_CACHE_TAG,
+  STOREFRONT_HIDDEN_CATEGORY_IDS,
   type HomeSectionKey,
 } from "./constants";
 import { homeProductInclude } from "./product-include";
@@ -81,7 +82,10 @@ const getCachedCms = unstable_cache(
     return {
       settings,
       heroSlides,
-      categorySpotlights,
+      categorySpotlights: categorySpotlights.filter(
+        (row) =>
+          !(STOREFRONT_HIDDEN_CATEGORY_IDS as readonly string[]).includes(row.categoryId)
+      ),
       promoBanners,
       picksHeroSecondary,
       picksEditorial,
@@ -174,10 +178,10 @@ export async function getHomePageData() {
 
 export async function getHomeMetadata(): Promise<Metadata> {
   const { settings } = await getCachedCms();
-  const title = settings?.homeTitle ?? "Hanara — Women's apparel & footwear";
+  const title = settings?.homeTitle ?? `${SITE_NAME} — Women's clothing`;
   const description =
     settings?.homeDescription ??
-    "Shop curated women's clothing, dresses, and heels — new drops and timeless staples.";
+    "Shop curated women's clothing and dresses — new drops and timeless staples.";
 
   return buildPageMetadata(title, description);
 }

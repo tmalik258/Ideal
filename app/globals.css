@@ -49,6 +49,9 @@
   --font-serif: var(--font-poppins);
   --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Consolas,
     "Liberation Mono", Menlo, monospace;
+  --color-brand-ivory: var(--brand-ivory);
+  --color-brand-forest: var(--brand-forest);
+  --color-brand-champagne: var(--brand-champagne);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -89,38 +92,44 @@
   --storefront-announcement-height: 0px;
   --site-chrome-height: var(--storefront-header-height);
   --radius: 0.625rem;
-  --background: #ffffff; /* landing white */
-  --foreground: #000000; /* pure black text */
+
+  /* Logo-based 60-30-10 brand trio (from public/logo.jpeg) */
+  --brand-ivory: #f7f4ec;
+  --brand-forest: #444e36;
+  --brand-champagne: #f0e8d0;
+  --brand-accent: var(--brand-champagne);
+
+  --background: var(--brand-ivory);
+  --foreground: #2a3124;
   --card: #ffffff;
-  --card-foreground: #000000;
+  --card-foreground: #2a3124;
   --popover: #ffffff;
-  --popover-foreground: #18181b;
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.2 0 0);
-  --accent: #f4f4f5;
-  --accent-foreground: #18181b;
+  --popover-foreground: #2a3124;
+  --primary: var(--brand-forest);
+  --primary-foreground: var(--brand-champagne);
+  --secondary: #efebe1;
+  --secondary-foreground: #2a3124;
+  --muted: #efebe1;
+  --muted-foreground: #5c6354;
+  --accent: var(--brand-champagne);
+  --accent-foreground: #2a3124;
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --brand-accent: #FFF8E7;
+  --border: color-mix(in srgb, var(--brand-forest) 12%, var(--brand-ivory));
+  --input: color-mix(in srgb, var(--brand-forest) 14%, var(--brand-ivory));
+  --ring: color-mix(in srgb, var(--brand-forest) 45%, transparent);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: #ffffff;
-  --sidebar-foreground: #000000;
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar: var(--brand-ivory);
+  --sidebar-foreground: #2a3124;
+  --sidebar-primary: var(--brand-forest);
+  --sidebar-primary-foreground: var(--brand-champagne);
+  --sidebar-accent: var(--brand-champagne);
+  --sidebar-accent-foreground: #2a3124;
+  --sidebar-border: color-mix(in srgb, var(--brand-forest) 12%, var(--brand-ivory));
+  --sidebar-ring: color-mix(in srgb, var(--brand-forest) 45%, transparent);
 }
 
 /* Admin dashboard — neutral zinc palette (matches storefront account/checkout pages) */
@@ -277,6 +286,17 @@
 
 /* Utility class for specific elements that need custom scrollbar */
 @layer utilities {
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+
   .scrollbar-thin {
     /* Thumb: subtle black; Track: zinc-50 */
     scrollbar-width: thin;
@@ -427,13 +447,13 @@
 
 /* Color contrast utilities */
 .text-contrast-safe {
-  color: #000;
-  background-color: #ffffff;
+  color: #2a3124;
+  background-color: var(--brand-ivory);
 }
 
 .text-contrast-safe-inverse {
-  color: #FFF8E7;
-  background-color: #000;
+  color: var(--brand-champagne);
+  background-color: var(--brand-forest);
 }
 
 /* Responsive typography */
@@ -603,8 +623,8 @@
   position: absolute;
   top: -40px;
   left: 6px;
-  background: #000;
-  color: #FFF8E7;
+  background: var(--brand-forest);
+  color: var(--brand-champagne);
   padding: 8px;
   text-decoration: none;
   border-radius: 4px;

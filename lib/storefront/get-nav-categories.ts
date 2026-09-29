@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { unstable_cache } from "next/cache";
+import { STOREFRONT_HIDDEN_CATEGORY_IDS } from "@/lib/storefront/constants";
 
 export type NavCategory = {
   id: string;
@@ -8,7 +9,10 @@ export type NavCategory = {
 
 async function loadNavCategories(): Promise<NavCategory[]> {
   return prisma.category.findMany({
-    where: { isActive: true },
+    where: {
+      isActive: true,
+      id: { notIn: [...STOREFRONT_HIDDEN_CATEGORY_IDS] },
+    },
     orderBy: { name: "asc" },
     select: { id: true, name: true },
   });

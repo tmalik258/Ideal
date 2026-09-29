@@ -27,6 +27,7 @@ import {
   authLinkClassName,
   authMutedTextClassName,
 } from "../../_components/auth-form-shell";
+import { SITE_EMAIL_SUPPORT } from "@/lib/site-metadata";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address" }),
@@ -111,10 +112,10 @@ export function ForgotPasswordForm() {
           <div className={`text-center ${authMutedTextClassName}`}>
             <p>Need help? Contact support at</p>
             <a
-              href="mailto:support@hanara.com"
+              href={`mailto:${SITE_EMAIL_SUPPORT}`}
               className={authLinkClassName}
             >
-              support@hanara.com
+              {SITE_EMAIL_SUPPORT}
             </a>
           </div>
         </div>

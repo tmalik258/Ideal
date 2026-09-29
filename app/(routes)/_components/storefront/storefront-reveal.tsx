@@ -3,6 +3,7 @@
 import { useEffect, useRef, type ReactNode } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { cn } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -14,10 +15,15 @@ function prefersReducedMotion(): boolean {
 type Props = {
   children: ReactNode;
   className?: string;
+  staggerChildren?: boolean;
 };
 
 /** Fade/slide section into view once when scrolled into viewport. */
-export function StorefrontReveal({ children, className }: Props) {
+export function StorefrontReveal({
+  children,
+  className,
+  staggerChildren = false,
+}: Props) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -26,10 +32,34 @@ export function StorefrontReveal({ children, className }: Props) {
 
     if (prefersReducedMotion()) {
       gsap.set(el, { opacity: 1, y: 0 });
+      gsap.set(el.querySelectorAll("[data-reveal-child]"), { opacity: 1, y: 0 });
       return;
     }
 
     const ctx = gsap.context(() => {
+      if (staggerChildren) {
+        const kids = el.querySelectorAll("[data-reveal-child]");
+        if (kids.length) {
+          gsap.fromTo(
+            kids,
+            { opacity: 0, y: 28 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.65,
+              stagger: 0.08,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: el,
+                start: "top 88%",
+                once: true,
+              },
+            }
+          );
+          return;
+        }
+      }
+
       gsap.fromTo(
         el,
         { opacity: 0, y: 36 },
@@ -48,10 +78,10 @@ export function StorefrontReveal({ children, className }: Props) {
     }, el);
 
     return () => ctx.revert();
-  }, []);
+  }, [staggerChildren]);
 
   return (
-    <div ref={ref} className={className}>
+    <div ref={ref} className={cn(className)}>
       {children}
     </div>
   );

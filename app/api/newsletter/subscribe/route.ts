@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
 import { newsletterSubscribeSchema } from "@/lib/validations/newsletter-schema";
 import emailService from "@/lib/services/email-service";
+import { SITE_EMAIL_SUPPORT } from "@/lib/site-metadata";
 
-const DEFAULT_NEWSLETTER_TO = "support@hanara.com";
+const DEFAULT_NEWSLETTER_TO = SITE_EMAIL_SUPPORT;
 
 export async function POST(request: Request) {
   try {
