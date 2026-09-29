@@ -1,8 +1,8 @@
 "use client";
 
 import axios from "axios";
-import { Mail, Sparkles } from "lucide-react";
 import { useMemo, useState } from "react";
+import { SITE_NAME } from "@/lib/site-metadata";
 
 interface NewsletterSectionProps {
   className?: string;
@@ -12,7 +12,7 @@ interface NewsletterSectionProps {
 
 const DEFAULT_TITLE = "Stay in the loop";
 const DEFAULT_SUBTITLE =
-  "Subscribe for new collections, exclusive offers, and style inspiration.";
+  "Early access to women's releases and members-only offers.";
 
 function isValidEmail(input: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input);
@@ -59,65 +59,62 @@ export default function NewsletterSection({
   };
 
   return (
-    <section className={`bg-zinc-50 py-14 md:py-20 ${className}`} aria-label="Newsletter subscription">
+    <section
+      className={`bg-brand-forest py-20 text-brand-champagne md:py-28 ${className}`}
+      aria-label="Newsletter subscription"
+    >
       <div className="mx-auto max-w-7xl px-4">
-        <div className="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-zinc-200/80">
-          <div className="grid gap-6 p-6 md:grid-cols-2 md:gap-8 md:p-10 lg:p-12">
-            <div>
-              <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-zinc-100 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-zinc-700">
-                <Sparkles className="h-3.5 w-3.5" />
-                Insider updates
-              </div>
-              <h2 className="text-2xl font-semibold tracking-tight text-zinc-900 md:text-3xl">{title}</h2>
-              <p className="mt-3 max-w-xl text-sm text-zinc-600 md:text-base">{subtitle}</p>
-              <ul className="mt-5 space-y-2 text-sm text-zinc-700">
-                <li>- Early access to new drops</li>
-                <li>- Subscriber-only offers</li>
-                <li>- Styling edits from our team</li>
-              </ul>
-            </div>
-
-            <div className="rounded-xl border border-zinc-200 bg-zinc-50/60 p-4 md:p-6">
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <label htmlFor="newsletter-email" className="text-sm font-medium text-zinc-900">
-                  Email address
-                </label>
-                <div className="relative">
-                  <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
-                  <input
-                    id="newsletter-email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="you@example.com"
-                    className="h-11 w-full rounded-lg border border-zinc-300 bg-white pl-10 pr-3 text-sm focus:border-zinc-900 focus:outline-none"
-                    aria-invalid={state === "error"}
-                    aria-describedby={errorMessage ? "newsletter-error" : undefined}
-                    required
-                  />
-                </div>
-                {errorMessage ? (
-                  <p id="newsletter-error" className="text-sm text-red-600">
-                    {errorMessage}
-                  </p>
-                ) : null}
-                {state === "success" ? (
-                  <p className="text-sm text-emerald-700">You&apos;re subscribed. Welcome to Hanara.</p>
-                ) : null}
-
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="inline-flex h-11 w-full items-center justify-center rounded-none rounded-tr-2xl rounded-bl-2xl bg-zinc-900 px-5 text-sm font-semibold tracking-wide text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60"
-                >
-                  {isSubmitting ? "Subscribing..." : "Subscribe"}
-                </button>
-              </form>
-              <p className="mt-4 text-xs text-zinc-500">
-                We respect your privacy. Unsubscribe anytime.
-              </p>
-            </div>
+        <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end lg:gap-16">
+          <div>
+            <p className="mb-4 font-serif text-[0.65rem] font-semibold tracking-[0.28em] text-brand-champagne/55 uppercase">
+              Newsletter
+            </p>
+            <h2 className="font-serif text-[clamp(1.75rem,4vw,3rem)] font-semibold leading-tight tracking-tight text-brand-champagne">
+              {title}
+            </h2>
+            <p className="mt-4 max-w-lg text-sm leading-relaxed text-brand-champagne/65 md:text-base">
+              {subtitle}
+            </p>
           </div>
+
+          <form onSubmit={handleSubmit} className="space-y-3">
+            <label htmlFor="newsletter-email" className="sr-only">
+              Email address
+            </label>
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <input
+                id="newsletter-email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                className="h-12 flex-1 border border-brand-champagne/30 bg-transparent px-4 text-sm text-brand-champagne placeholder:text-brand-champagne/40 focus:border-brand-champagne focus:outline-none"
+                aria-invalid={state === "error"}
+                aria-describedby={errorMessage ? "newsletter-error" : undefined}
+                required
+              />
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="inline-flex h-12 cursor-pointer items-center justify-center bg-brand-champagne px-7 text-sm font-medium tracking-wide text-brand-forest transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {isSubmitting ? "Subscribing..." : "Subscribe"}
+              </button>
+            </div>
+            {errorMessage ? (
+              <p id="newsletter-error" className="text-sm text-red-300">
+                {errorMessage}
+              </p>
+            ) : null}
+            {state === "success" ? (
+              <p className="text-sm text-brand-champagne/80">
+                You&apos;re subscribed. Welcome to {SITE_NAME}.
+              </p>
+            ) : null}
+            <p className="text-xs text-brand-champagne/40">
+              We respect your privacy. Unsubscribe anytime.
+            </p>
+          </form>
         </div>
       </div>
     </section>

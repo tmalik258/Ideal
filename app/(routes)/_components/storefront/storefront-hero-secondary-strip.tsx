@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { ProductWithRelations } from "@/lib/hooks/useProductQueries";
+import { formatStorefrontPrice } from "@/lib/site-metadata";
 
 type Props = {
   title: string;
@@ -13,17 +14,17 @@ export function StorefrontHeroSecondaryStrip({ title, subtitle, products }: Prop
 
   return (
     <section
-      className="border-b border-zinc-100 bg-white py-6 md:py-8"
+      className="border-b border-brand-forest/10 bg-brand-ivory py-6 md:py-8"
       aria-label={title}
     >
       <div className="mx-auto max-w-7xl px-4">
         <div className="mb-4 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h2 className="text-lg font-semibold tracking-tight text-zinc-900 md:text-xl">
+            <h2 className="font-serif text-lg font-semibold tracking-tight text-foreground md:text-xl">
               {title}
             </h2>
             {subtitle ? (
-              <p className="mt-1 text-sm text-zinc-600">{subtitle}</p>
+              <p className="mt-1 text-sm text-foreground/55">{subtitle}</p>
             ) : null}
           </div>
         </div>
@@ -38,11 +39,11 @@ export function StorefrontHeroSecondaryStrip({ title, subtitle, products }: Prop
                 href={`/products/${product.id}`}
                 className="flex w-[140px] shrink-0 snap-start flex-col gap-2 sm:w-[160px] cursor-pointer"
               >
-                <div className="relative aspect-square overflow-hidden rounded-xl bg-zinc-100 ring-1 ring-zinc-200/80">
+                <div className="relative aspect-square overflow-hidden bg-brand-champagne/40">
                   <Image src={img} alt={product.name} fill className="object-cover" sizes="160px" />
                 </div>
-                <p className="line-clamp-2 text-xs font-medium text-zinc-900">{product.name}</p>
-                <p className="text-xs font-semibold text-zinc-700">${product.price.toFixed(2)}</p>
+                <p className="line-clamp-2 text-xs font-medium text-foreground">{product.name}</p>
+                <p className="text-xs text-foreground/60">{formatStorefrontPrice(product.price)}</p>
               </Link>
             );
           })}

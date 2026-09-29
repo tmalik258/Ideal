@@ -3,11 +3,12 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ShieldX, ArrowLeft, Home } from 'lucide-react';
+import { buildPageMetadata, SITE_EMAIL_SUPPORT } from '@/lib/site-metadata';
 
-export const metadata: Metadata = {
-  title: 'Unauthorized Access | Hanara',
-  description: 'You do not have permission to access this page.',
-};
+export const metadata: Metadata = buildPageMetadata(
+  'Unauthorized Access',
+  'You do not have permission to access this page.'
+);
 
 export default function UnauthorizedPage() {
   return (
@@ -42,10 +43,10 @@ export default function UnauthorizedPage() {
           <div className="text-center text-sm text-muted-foreground">
             <p>Need help? Contact support at</p>
             <a
-              href="mailto:support@hanara.com"
+              href={`mailto:${SITE_EMAIL_SUPPORT}`}
               className="text-foreground underline underline-offset-4 hover:text-primary"
             >
-              support@hanara.com
+              {SITE_EMAIL_SUPPORT}
             </a>
           </div>
         </CardContent>

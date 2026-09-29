@@ -48,7 +48,7 @@ export async function StorefrontHome() {
       </div>
     ),
     categories: data.categorySpotlights.length ? (
-      <StorefrontReveal>
+      <StorefrontReveal staggerChildren>
         <StorefrontCategorySpotlight
           title={categoriesHeading.title}
           subtitle={categoriesHeading.subtitle}
@@ -57,7 +57,7 @@ export async function StorefrontHome() {
       </StorefrontReveal>
     ) : null,
     editorial: data.picksEditorial.length ? (
-      <StorefrontReveal>
+      <StorefrontReveal staggerChildren>
         <StorefrontEditorialGrid
           title={editorialHeading.title}
           subtitle={editorialHeading.subtitle}
@@ -67,9 +67,7 @@ export async function StorefrontHome() {
     ) : null,
     promos: data.promoBanners.length ? (
       <StorefrontReveal>
-        <div className="bg-white">
-          <StorefrontPromoBanners banners={data.promoBanners} />
-        </div>
+        <StorefrontPromoBanners banners={data.promoBanners} />
       </StorefrontReveal>
     ) : null,
     newArrivals: (
@@ -84,7 +82,7 @@ export async function StorefrontHome() {
     ),
     sale: (
       <StorefrontReveal>
-        <div className="bg-zinc-50">
+        <div className="bg-white">
           <StorefrontProductRail
             title={saleHeading.title}
             subtitle={saleHeading.subtitle}
@@ -107,7 +105,7 @@ export async function StorefrontHome() {
     ),
     trending: (
       <StorefrontReveal>
-        <div className="bg-zinc-50">
+        <div className="bg-white">
           <StorefrontProductRail
             title={trendingHeading.title}
             subtitle={trendingHeading.subtitle}
@@ -140,7 +138,7 @@ export async function StorefrontHome() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-brand-ivory">
       {data.sectionOrder.map((key) => {
         if (key === "announcement") return null;
         const block = sectionBlocks[key];

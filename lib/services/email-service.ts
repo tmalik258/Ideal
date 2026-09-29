@@ -1,5 +1,6 @@
 import * as nodemailer from 'nodemailer';
 import type { Transporter } from 'nodemailer';
+import { SITE_EMAIL_NOREPLY, SITE_NAME } from '@/lib/site-metadata';
 
 // Email configuration interface
 interface EmailConfig {
@@ -49,8 +50,8 @@ class EmailService {
       },
     };
     
-    this.fromName = process.env.EMAIL_FROM_NAME || 'Hanara';
-    this.fromAddress = process.env.EMAIL_FROM_ADDRESS || 'noreply@hanara.com';
+    this.fromName = process.env.EMAIL_FROM_NAME || SITE_NAME;
+    this.fromAddress = process.env.EMAIL_FROM_ADDRESS || SITE_EMAIL_NOREPLY;
     
     this.initializeTransporter();
   }

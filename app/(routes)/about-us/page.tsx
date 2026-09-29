@@ -18,7 +18,7 @@ export default function AboutUsPage() {
             About Us
           </h1>
           <p className="mt-4 text-lg text-zinc-600 md:text-xl">
-            Women&apos;s apparel and footwear with a focus on trust, quality, and customer care.
+            Women&apos;s clothing with a focus on trust, quality, and customer care.
           </p>
         </header>
       </div>

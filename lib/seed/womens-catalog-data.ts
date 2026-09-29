@@ -1,4 +1,5 @@
 import { GenderTarget } from "@prisma/client";
+import { SITE_NAME } from "@/lib/site-metadata";
 
 /** Shared catalog + storefront seed data — women's clothing and shoes only. */
 
@@ -24,7 +25,7 @@ export const WOMENS_CATEGORIES = [
     image:
       "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=800&q=80",
     productsCount: 0,
-    featured: true,
+    featured: false,
   },
 ];
 
@@ -99,7 +100,7 @@ export const WOMENS_PRODUCTS = [
     id: "prod-satin-midi",
     name: "Satin Midi Skirt",
     description:
-      "Liquid satin midi with a soft sheen — pairs with knits, blazers, and heels.",
+      "Liquid satin midi with a soft sheen — pairs with knits and blazers.",
     price: 89.99,
     image:
       "https://images.unsplash.com/photo-1581044777550-4cfa60707c03?w=800&q=80",
@@ -223,17 +224,17 @@ export const WOMENS_HERO_SLIDES = [
     sortOrder: 1,
     isActive: true,
     imageDesktop:
-      "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=1920&q=80",
+      "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1920&q=80",
     imageMobile:
-      "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=768&q=80",
-    heading: "Heels that elevate every look",
+      "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=768&q=80",
+    heading: "Layers for every day",
     subheading:
-      "Stilettos, pumps, and block heels — statement height with refined comfort.",
-    badgeText: "Shoes & heels",
-    primaryCtaLabel: "Shop heels",
-    primaryCtaHref: "/products?genderTarget=WOMENS&category=cat-womens-shoes",
-    secondaryCtaLabel: "View all shoes",
-    secondaryCtaHref: "/products?genderTarget=WOMENS&category=cat-womens-shoes",
+      "Blazers, jackets, and polished staples cut for modern silhouettes.",
+    badgeText: "Essentials",
+    primaryCtaLabel: "Shop clothing",
+    primaryCtaHref: "/products?genderTarget=WOMENS&category=cat-fashion",
+    secondaryCtaLabel: "New arrivals",
+    secondaryCtaHref: "/products?genderTarget=WOMENS&isNew=true",
   },
   {
     sortOrder: 2,
@@ -260,8 +261,8 @@ export const WOMENS_HERO_SLIDES = [
       "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=768&q=80",
     heading: "Curated for her",
     subheading:
-      "Women's clothing and footwear only — edit your wardrobe in one place.",
-    badgeText: "Hanara",
+      "Women's clothing only — edit your wardrobe in one place.",
+    badgeText: SITE_NAME,
     primaryCtaLabel: "Explore collection",
     primaryCtaHref: "/products?genderTarget=WOMENS",
     secondaryCtaLabel: "Collections",
@@ -272,11 +273,11 @@ export const WOMENS_HERO_SLIDES = [
 export const WOMENS_STOREFRONT_SETTINGS = {
   announcementEnabled: true,
   announcementText:
-    "Free shipping on orders over $75 · New women's arrivals every week",
+    "Free shipping on orders over PKR 10,000 · New women's arrivals every week",
   announcementHref: "/products?genderTarget=WOMENS",
-  homeTitle: "Women's apparel & footwear",
+  homeTitle: "Women's clothing",
   homeDescription:
-    "Shop curated women's clothing, dresses, and heels — new drops and timeless staples.",
+    "Shop curated women's clothing and dresses — new drops and timeless staples.",
   newsletterTitle: "Stay in the loop",
   newsletterSubtitle: "Early access to women's releases and members-only offers.",
   trustBadgesJson: [

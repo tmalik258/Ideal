@@ -211,7 +211,7 @@ export function Header({ navCategories = [] }: HeaderProps) {
               </SheetTrigger>
               <SheetContent
                 side="right"
-                className="z-[3000] w-[min(100vw,22rem)] gap-0 overflow-hidden border-l border-black/10 bg-white p-0 sm:max-w-[22rem]"
+                className="z-[3000] w-[min(100vw,22rem)] gap-0 overflow-hidden border-l border-brand-forest/10 bg-brand-ivory p-0 sm:max-w-[22rem]"
               >
                 <SheetTitle className="sr-only">Main menu</SheetTitle>
                 <SheetDescription className="sr-only">
@@ -263,7 +263,7 @@ export function Header({ navCategories = [] }: HeaderProps) {
                     <p className="mb-3 font-serif text-[0.65rem] font-semibold tracking-[0.28em] text-foreground/45 uppercase">
                       Shop
                     </p>
-                    <div className="flex flex-col border-t border-black/10">
+                    <div className="flex flex-col border-t border-brand-forest/10">
                       {categoryLinks.map((link, index) => (
                         <Link
                           key={link.href}
@@ -299,7 +299,7 @@ export function Header({ navCategories = [] }: HeaderProps) {
                     </div>
                   </nav>
 
-                  <div className="mt-auto shrink-0 space-y-1 border-t border-black/10 pt-5 animate-in fade-in duration-500 delay-300">
+                  <div className="mt-auto shrink-0 space-y-1 border-t border-brand-forest/10 pt-5 animate-in fade-in duration-500 delay-300">
                     <Link href="/cart" className={utilityLinkClass}>
                       <ShoppingCart className="h-4 w-4" />
                       <span>

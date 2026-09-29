@@ -3,6 +3,9 @@ export const HOME_PRODUCTS_CACHE_TAG = "home-products";
 /** Matches route `export const revalidate` and unstable_cache revalidate option */
 export const HOME_PAGE_REVALIDATE_SECONDS = 300;
 
+/** Footwear category kept in catalog but excluded from nav / homepage spotlights. */
+export const STOREFRONT_HIDDEN_CATEGORY_IDS = ["cat-womens-shoes"] as const;
+
 export const DEFAULT_HOME_SECTION_ORDER = [
   "announcement",
   "hero",

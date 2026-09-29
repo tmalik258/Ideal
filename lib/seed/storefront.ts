@@ -8,7 +8,6 @@ import {
 
 const preferredSpotlights = [
   { categoryId: WOMENS_CATEGORY_IDS.clothing, titleOverride: "Clothing" },
-  { categoryId: WOMENS_CATEGORY_IDS.shoes, titleOverride: "Shoes & Heels" },
 ];
 
 const preferredProductPicks: Array<{
@@ -18,9 +17,10 @@ const preferredProductPicks: Array<{
 }> = [
   { productId: "prod-wrap-dress", section: HomeProductPickSection.EDITORIAL_GRID, sortOrder: 0 },
   { productId: "prod-linen-blazer", section: HomeProductPickSection.EDITORIAL_GRID, sortOrder: 1 },
-  { productId: "prod-running-shoes", section: HomeProductPickSection.HERO_SECONDARY, sortOrder: 0 },
-  { productId: "prod-block-heels", section: HomeProductPickSection.TRENDING, sortOrder: 0 },
-  { productId: "prod-pump-heels", section: HomeProductPickSection.TRENDING, sortOrder: 1 },
+  { productId: "prod-satin-midi", section: HomeProductPickSection.EDITORIAL_GRID, sortOrder: 2 },
+  { productId: "prod-designer-jacket", section: HomeProductPickSection.HERO_SECONDARY, sortOrder: 0 },
+  { productId: "prod-wrap-dress", section: HomeProductPickSection.TRENDING, sortOrder: 0 },
+  { productId: "prod-linen-blazer", section: HomeProductPickSection.TRENDING, sortOrder: 1 },
 ];
 
 export async function seedStorefront() {
@@ -55,12 +55,18 @@ export async function seedStorefront() {
     .filter((row) => categoryIds.has(row.categoryId))
     .map((row, sortOrder) => ({ ...row, sortOrder, isActive: true }));
 
-  for (const row of spotlightRows.length > 0 ? spotlightRows : categories.slice(0, 2).map((category, sortOrder) => ({
-    categoryId: category.id,
-    sortOrder,
-    titleOverride: category.name,
-    isActive: true,
-  }))) {
+  const clothingOnlyCategories = categories.filter(
+    (category) => category.id !== WOMENS_CATEGORY_IDS.shoes
+  );
+
+  for (const row of spotlightRows.length > 0
+    ? spotlightRows
+    : clothingOnlyCategories.slice(0, 2).map((category, sortOrder) => ({
+        categoryId: category.id,
+        sortOrder,
+        titleOverride: category.name,
+        isActive: true,
+      }))) {
     await prisma.homeCategorySpotlight.create({ data: row });
   }
 
@@ -104,7 +110,7 @@ export async function seedStorefront() {
     data: {
       sortOrder: 0,
       title: "Members save on women's edits",
-      body: "Sign in at checkout to apply promos and track rewards on clothing and heels.",
+      body: "Sign in at checkout to apply promos and track rewards on clothing.",
       imageUrl:
         "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1200&q=80",
       href: "/auth/signup",
@@ -115,8 +121,8 @@ export async function seedStorefront() {
   await prisma.homePromoBanner.create({
     data: {
       sortOrder: 1,
-      title: "Heels & dresses on sale",
-      body: "Limited-time pricing on select women's shoes and occasion wear.",
+      title: "Dresses on sale",
+      body: "Limited-time pricing on select women's occasion wear.",
       imageUrl:
         "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=1200&q=80",
       href: "/products?genderTarget=WOMENS&onSale=true",

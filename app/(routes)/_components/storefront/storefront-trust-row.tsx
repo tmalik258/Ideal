@@ -9,9 +9,10 @@ const DEFAULT_BADGES: TrustBadge[] = [
 
 function IconFor({ name }: { name: string }) {
   const n = name.toLowerCase();
-  if (n.includes("shield")) return <Shield className="h-6 w-6" />;
-  if (n.includes("refresh") || n.includes("return")) return <RefreshCw className="h-6 w-6" />;
-  return <Truck className="h-6 w-6" />;
+  if (n.includes("shield")) return <Shield className="h-5 w-5" strokeWidth={1.5} />;
+  if (n.includes("refresh") || n.includes("return"))
+    return <RefreshCw className="h-5 w-5" strokeWidth={1.5} />;
+  return <Truck className="h-5 w-5" strokeWidth={1.5} />;
 }
 
 type Props = {
@@ -22,16 +23,22 @@ export function StorefrontTrustRow({ badges }: Props) {
   const rows = badges?.length ? badges : DEFAULT_BADGES;
 
   return (
-    <section className="border-y border-zinc-100 bg-white py-12 md:py-14" aria-label="Store policies">
-      <div className="mx-auto grid max-w-7xl gap-8 px-4 sm:grid-cols-3">
+    <section
+      className="border-y border-brand-forest/10 bg-white py-14 md:py-16"
+      aria-label="Store policies"
+    >
+      <div className="mx-auto grid max-w-7xl gap-10 px-4 sm:grid-cols-3 sm:gap-8">
         {rows.map((b, i) => (
-          <div key={`${b.label}-${i}`} className="flex items-center justify-center gap-4">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-zinc-100 text-zinc-900">
+          <div
+            key={`${b.label}-${i}`}
+            className="flex items-start gap-4 sm:justify-center sm:text-center sm:flex-col sm:items-center"
+          >
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-champagne text-brand-forest">
               <IconFor name={b.icon} />
             </div>
             <div>
-              <p className="font-semibold text-zinc-900">{b.label}</p>
-              <p className="mt-1 text-sm text-zinc-600">{b.sub}</p>
+              <p className="font-serif text-lg tracking-tight text-foreground">{b.label}</p>
+              <p className="mt-1 text-sm text-foreground/50">{b.sub}</p>
             </div>
           </div>
         ))}

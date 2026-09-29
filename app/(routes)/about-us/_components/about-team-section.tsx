@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { teamMembers } from "./about-data";
+import { SITE_NAME } from "@/lib/site-metadata";
 
 export function AboutTeamSection() {
   return (
@@ -7,7 +8,7 @@ export function AboutTeamSection() {
       <div className="mx-auto max-w-7xl px-4">
         <header className="mb-12 text-center">
           <h2 className="text-3xl font-semibold tracking-tight text-zinc-900 md:text-4xl">
-            The People Behind Hanara
+            The People Behind {SITE_NAME}
           </h2>
           <p className="mx-auto mt-3 max-w-2xl text-zinc-600">
             A small team focused on quality products and dependable service.

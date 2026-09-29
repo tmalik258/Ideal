@@ -19,7 +19,7 @@ export function StorefrontPromoBanners({ banners }: Props) {
   if (!banners.length) return null;
 
   return (
-    <div className="space-y-10 py-14 md:py-16">
+    <div className="space-y-16 py-20 md:space-y-20 md:py-28">
       {banners.map((b) => {
         const isFull = b.layout === PromoBannerLayout.FULL_WIDTH;
         const imageLeft = b.layout === PromoBannerLayout.SPLIT_LEFT_IMAGE;
@@ -27,14 +27,27 @@ export function StorefrontPromoBanners({ banners }: Props) {
         if (isFull) {
           return (
             <section key={b.id} className="relative mx-auto max-w-7xl overflow-hidden px-4">
-              <Link href={b.href} className="relative block aspect-[21/9] min-h-[220px] overflow-hidden rounded-2xl bg-zinc-900 cursor-pointer md:min-h-[280px]">
-                <Image src={b.imageUrl} alt={b.title} fill className="object-cover opacity-90" sizes="100vw" />
-                <div className="absolute inset-0 flex flex-col justify-center bg-black/35 p-8 md:p-12">
-                  <h3 className="max-w-xl text-2xl font-semibold text-white md:text-4xl">{b.title}</h3>
+              <Link
+                href={b.href}
+                className="relative block aspect-[21/9] min-h-[240px] overflow-hidden bg-brand-forest cursor-pointer md:min-h-[320px]"
+              >
+                <Image
+                  src={b.imageUrl}
+                  alt={b.title}
+                  fill
+                  className="object-cover opacity-80"
+                  sizes="100vw"
+                />
+                <div className="absolute inset-0 flex flex-col justify-center bg-brand-forest/45 p-8 md:p-14">
+                  <h3 className="max-w-xl font-serif text-[clamp(1.75rem,4vw,3rem)] font-semibold leading-tight tracking-tight text-brand-champagne">
+                    {b.title}
+                  </h3>
                   {b.body ? (
-                    <p className="mt-3 max-w-xl text-sm text-white/90 md:text-base">{b.body}</p>
+                    <p className="mt-4 max-w-xl text-sm text-brand-champagne/75 md:text-base">
+                      {b.body}
+                    </p>
                   ) : null}
-                  <span className="mt-6 inline-flex w-fit rounded-none rounded-tr-2xl rounded-bl-2xl bg-white px-5 py-2 text-sm font-semibold text-zinc-900">
+                  <span className="mt-8 inline-flex w-fit border border-brand-champagne/50 px-6 py-2.5 text-sm font-medium tracking-wide text-brand-champagne transition hover:bg-brand-champagne hover:text-brand-forest">
                     Shop now
                   </span>
                 </div>
@@ -45,25 +58,38 @@ export function StorefrontPromoBanners({ banners }: Props) {
 
         return (
           <section key={b.id} className="mx-auto max-w-7xl px-4" aria-label={b.title}>
-            <div className="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-zinc-200/80">
-              <div className="grid md:grid-cols-2">
-                <div
-                  className={`relative aspect-[4/3] md:aspect-auto md:min-h-[320px] ${imageLeft ? "md:order-first" : "md:order-last"}`}
+            <div className="grid overflow-hidden bg-white md:grid-cols-2">
+              <div
+                className={`relative aspect-[4/3] md:aspect-auto md:min-h-[380px] ${imageLeft ? "md:order-first" : "md:order-last"}`}
+              >
+                <Link
+                  href={b.href}
+                  className="relative block h-full min-h-[260px] cursor-pointer md:min-h-[380px]"
                 >
-                  <Link href={b.href} className="relative block h-full min-h-[240px] cursor-pointer md:min-h-[320px]">
-                    <Image src={b.imageUrl} alt={b.title} fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" />
-                  </Link>
-                </div>
-                <div className="flex flex-col justify-center p-8 md:p-12 lg:p-16">
-                  <h3 className="text-2xl font-semibold tracking-tight text-zinc-900 md:text-3xl">{b.title}</h3>
-                  {b.body ? <p className="mt-4 text-zinc-600">{b.body}</p> : null}
-                  <Link
-                    href={b.href}
-                    className="mt-8 inline-flex w-fit rounded-none rounded-tr-2xl rounded-bl-2xl bg-zinc-900 px-6 py-3 text-sm font-semibold tracking-wide text-white transition hover:bg-zinc-800 cursor-pointer"
-                  >
-                    Explore
-                  </Link>
-                </div>
+                  <Image
+                    src={b.imageUrl}
+                    alt={b.title}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                  />
+                </Link>
+              </div>
+              <div className="flex flex-col justify-center bg-brand-ivory px-8 py-12 md:px-14 md:py-16 lg:px-16">
+                <h3 className="font-serif text-[clamp(1.75rem,3vw,2.75rem)] font-semibold leading-tight tracking-tight text-foreground">
+                  {b.title}
+                </h3>
+                {b.body ? (
+                  <p className="mt-4 max-w-md text-sm leading-relaxed text-foreground/60 md:text-base">
+                    {b.body}
+                  </p>
+                ) : null}
+                <Link
+                  href={b.href}
+                  className="mt-8 inline-flex w-fit bg-brand-forest px-6 py-3 text-sm font-medium tracking-wide text-brand-champagne transition hover:opacity-90 cursor-pointer"
+                >
+                  Explore
+                </Link>
               </div>
             </div>
           </section>
