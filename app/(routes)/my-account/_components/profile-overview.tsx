@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, Lock, User } from "lucide-react";
 import { UserInitialsAvatar } from "@/components/ui/user-initials-avatar";
-import { storefrontCard, storefrontOutlineBtn } from "@/lib/storefront/surface";
+import { storefrontCard, storefrontOutlineBtn, storefrontContainer } from "@/lib/storefront/surface";
 import { cn } from "@/lib/utils";
 
 const actionButtonClass = cn(storefrontOutlineBtn, "rounded-none");
@@ -18,7 +18,7 @@ const ProfileOverview = ({
   onChangePasswordClick?: () => void;
 }) => {
   return (
-    <div className="container mx-auto mb-8 px-4">
+    <div className={cn(storefrontContainer, "mb-8")}>
       <div className={cn(storefrontCard, "mb-6 p-8 md:p-10")}>
         <div className="mb-6 flex items-center gap-2">
           <CheckCircle2 className="h-6 w-6 text-brand-forest" aria-hidden />

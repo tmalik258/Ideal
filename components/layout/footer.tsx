@@ -10,6 +10,7 @@ import {
   socialLinks,
 } from "./footer-data";
 import { SITE_EMAIL_HELLO, SITE_NAME } from "@/lib/site-metadata";
+import { storefrontContainer } from "@/lib/storefront/surface";
 
 interface FooterProps {
   className?: string;
@@ -77,7 +78,7 @@ export function Footer({ className = "" }: FooterProps) {
           </div>
         </div>
 
-        <div className="relative mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8 lg:py-16">
+        <div className={cn(storefrontContainer, "relative py-14 lg:py-16")}>
           <div className="grid gap-12 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:gap-16">
             <div className="space-y-8">
               <div className="space-y-4">
@@ -138,7 +139,7 @@ export function Footer({ className = "" }: FooterProps) {
         </div>
 
         <div className="relative border-t border-brand-champagne/10">
-          <div className="mx-auto flex max-w-7xl flex-col items-center gap-4 px-4 py-6 text-xs text-brand-champagne/45 sm:px-6 lg:flex-row lg:justify-between lg:px-8">
+          <div className={cn(storefrontContainer, "flex flex-col items-center gap-4 py-6 text-xs text-brand-champagne/45 lg:flex-row lg:justify-between")}>
             <p className="text-center lg:text-left">
               © {year} {SITE_NAME}. All rights reserved.
             </p>

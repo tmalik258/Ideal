@@ -18,11 +18,7 @@ import type {
   PromoCodeApplicationResponse,
 } from "@/lib/types/promo-code";
 import { formatStorefrontPrice } from "@/lib/site-metadata";
-import {
-  storefrontEyebrow,
-  storefrontPage,
-  storefrontTitle,
-} from "@/lib/storefront/surface";
+import { storefrontEyebrow, storefrontPage, storefrontTitle, storefrontContainer } from "@/lib/storefront/surface";
 import { cn } from "@/lib/utils";
 
 type CheckoutFormData = {
@@ -402,7 +398,7 @@ export default function CheckoutPage() {
 
   return (
     <div className={storefrontPage}>
-      <div className="container mx-auto px-4 pb-16 pt-10 md:pt-12">
+      <div className={cn(storefrontContainer, "pb-16 pt-10 md:pt-12")}>
         <header className="mb-10">
           <p className={storefrontEyebrow}>Checkout</p>
           <h1

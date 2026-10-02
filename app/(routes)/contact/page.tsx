@@ -4,14 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import {
-  storefrontCard,
-  storefrontInput,
-  storefrontOutlineBtn,
-  storefrontPage,
-  storefrontPrimaryBtn,
-  storefrontTitle,
-} from "@/lib/storefront/surface";
+import { storefrontCard, storefrontInput, storefrontOutlineBtn, storefrontPage, storefrontPrimaryBtn, storefrontTitle, storefrontContainer } from "@/lib/storefront/surface";
 import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -300,7 +293,7 @@ export default function ContactPage() {
 
   return (
     <div className={storefrontPage}>
-      <div className="container mx-auto px-4 py-8">
+      <div className={cn(storefrontContainer, "py-8")}>
       {/* Header */}
       <div className="mb-12 text-center">
         <h1 className={cn(storefrontTitle, "mb-4")}>Contact Us</h1>
@@ -393,11 +386,15 @@ export default function ContactPage() {
                   </p>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  {/* Name and Email */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="name">Full Name *</Label>
+                <form onSubmit={handleSubmit} className="space-y-5">
+                  <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+                    <div className="space-y-2">
+                      <Label
+                        htmlFor="name"
+                        className="text-sm font-medium text-foreground/70"
+                      >
+                        Full Name <span className="text-red-500">*</span>
+                      </Label>
                       <Input
                         id="name"
                         name="name"
@@ -407,15 +404,22 @@ export default function ContactPage() {
                         placeholder="Enter your full name"
                         className={cn(
                           storefrontInput,
-                          formErrors.name && "border-red-500 focus-visible:ring-red-500/20"
+                          "h-11",
+                          formErrors.name &&
+                            "border-red-500 focus-visible:ring-red-500/20"
                         )}
                       />
-                      {formErrors.name && (
-                        <p className="text-red-500 text-sm mt-1">{formErrors.name}</p>
-                      )}
+                      {formErrors.name ? (
+                        <p className="text-sm text-red-500">{formErrors.name}</p>
+                      ) : null}
                     </div>
-                    <div>
-                      <Label htmlFor="email">Email Address *</Label>
+                    <div className="space-y-2">
+                      <Label
+                        htmlFor="email"
+                        className="text-sm font-medium text-foreground/70"
+                      >
+                        Email Address <span className="text-red-500">*</span>
+                      </Label>
                       <Input
                         id="email"
                         name="email"
@@ -426,19 +430,25 @@ export default function ContactPage() {
                         placeholder="Enter your email address"
                         className={cn(
                           storefrontInput,
-                          formErrors.email && "border-red-500 focus-visible:ring-red-500/20"
+                          "h-11",
+                          formErrors.email &&
+                            "border-red-500 focus-visible:ring-red-500/20"
                         )}
                       />
-                      {formErrors.email && (
-                        <p className="text-red-500 text-sm mt-1">{formErrors.email}</p>
-                      )}
+                      {formErrors.email ? (
+                        <p className="text-sm text-red-500">{formErrors.email}</p>
+                      ) : null}
                     </div>
                   </div>
 
-                  {/* Phone and Category */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="phone">Phone Number</Label>
+                  <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+                    <div className="space-y-2">
+                      <Label
+                        htmlFor="phone"
+                        className="text-sm font-medium text-foreground/70"
+                      >
+                        Phone Number
+                      </Label>
                       <Input
                         id="phone"
                         name="phone"
@@ -448,21 +458,34 @@ export default function ContactPage() {
                         placeholder="Enter your phone number"
                         className={cn(
                           storefrontInput,
-                          formErrors.phone && "border-red-500 focus-visible:ring-red-500/20"
+                          "h-11",
+                          formErrors.phone &&
+                            "border-red-500 focus-visible:ring-red-500/20"
                         )}
                       />
-                      {formErrors.phone && (
-                        <p className="text-red-500 text-sm mt-1">{formErrors.phone}</p>
-                      )}
+                      {formErrors.phone ? (
+                        <p className="text-sm text-red-500">{formErrors.phone}</p>
+                      ) : null}
                     </div>
-                    <div>
-                      <Label htmlFor="category">Category *</Label>
-                      <Select value={formData.category} onValueChange={(value) => handleSelectChange('category', value)}>
+                    <div className="space-y-2">
+                      <Label
+                        htmlFor="category"
+                        className="text-sm font-medium text-foreground/70"
+                      >
+                        Category <span className="text-red-500">*</span>
+                      </Label>
+                      <Select
+                        value={formData.category}
+                        onValueChange={(value) =>
+                          handleSelectChange("category", value)
+                        }
+                      >
                         <SelectTrigger
                           className={cn(
-                            "w-full cursor-pointer",
+                            "h-11 w-full cursor-pointer",
                             storefrontInput,
-                            formErrors.category && "border-red-500 focus-visible:ring-red-500/20"
+                            formErrors.category &&
+                              "border-red-500 focus-visible:ring-red-500/20"
                           )}
                         >
                           <SelectValue placeholder="Select a category" />
@@ -470,37 +493,57 @@ export default function ContactPage() {
                         <SelectContent className="max-h-60">
                           <SelectItem value="general">General Inquiry</SelectItem>
                           <SelectItem value="order">Order Support</SelectItem>
-                          <SelectItem value="shipping">Shipping Question</SelectItem>
-                          <SelectItem value="returns">Returns & Exchanges</SelectItem>
-                          <SelectItem value="technical">Technical Support</SelectItem>
+                          <SelectItem value="shipping">
+                            Shipping Question
+                          </SelectItem>
+                          <SelectItem value="returns">
+                            Returns &amp; Exchanges
+                          </SelectItem>
+                          <SelectItem value="technical">
+                            Technical Support
+                          </SelectItem>
                           <SelectItem value="billing">Billing Question</SelectItem>
-                          <SelectItem value="feedback">Feedback & Suggestions</SelectItem>
+                          <SelectItem value="feedback">
+                            Feedback &amp; Suggestions
+                          </SelectItem>
                         </SelectContent>
                       </Select>
-                      {formErrors.category && (
-                        <p className="text-red-500 text-sm mt-1">{formErrors.category}</p>
-                      )}
+                      {formErrors.category ? (
+                        <p className="text-sm text-red-500">
+                          {formErrors.category}
+                        </p>
+                      ) : null}
                     </div>
                   </div>
 
-                  {/* Order Number (conditional) */}
-                  {(formData.category === "order" || formData.category === "shipping" || formData.category === "returns") && (
-                    <div>
-                      <Label htmlFor="orderNumber">Order Number</Label>
+                  {formData.category === "order" ||
+                  formData.category === "shipping" ||
+                  formData.category === "returns" ? (
+                    <div className="space-y-2">
+                      <Label
+                        htmlFor="orderNumber"
+                        className="text-sm font-medium text-foreground/70"
+                      >
+                        Order Number
+                      </Label>
                       <Input
                         id="orderNumber"
                         name="orderNumber"
                         value={formData.orderNumber}
                         onChange={handleInputChange}
                         placeholder="Enter your order number (optional)"
-                        className={storefrontInput}
+                        className={cn(storefrontInput, "h-11")}
                       />
                     </div>
-                  )}
+                  ) : null}
 
-                  {/* Subject */}
-                  <div>
-                    <Label htmlFor="subject">Subject *</Label>
+                  <div className="space-y-2">
+                    <Label
+                      htmlFor="subject"
+                      className="text-sm font-medium text-foreground/70"
+                    >
+                      Subject <span className="text-red-500">*</span>
+                    </Label>
                     <Input
                       id="subject"
                       name="subject"
@@ -510,17 +553,23 @@ export default function ContactPage() {
                       placeholder="Brief description of your inquiry"
                       className={cn(
                         storefrontInput,
-                        formErrors.subject && "border-red-500 focus-visible:ring-red-500/20"
+                        "h-11",
+                        formErrors.subject &&
+                          "border-red-500 focus-visible:ring-red-500/20"
                       )}
                     />
-                    {formErrors.subject && (
-                      <p className="text-red-500 text-sm mt-1">{formErrors.subject}</p>
-                    )}
+                    {formErrors.subject ? (
+                      <p className="text-sm text-red-500">{formErrors.subject}</p>
+                    ) : null}
                   </div>
 
-                  {/* Message */}
-                  <div>
-                    <Label htmlFor="message">Message *</Label>
+                  <div className="space-y-2">
+                    <Label
+                      htmlFor="message"
+                      className="text-sm font-medium text-foreground/70"
+                    >
+                      Message <span className="text-red-500">*</span>
+                    </Label>
                     <Textarea
                       id="message"
                       name="message"
@@ -531,15 +580,16 @@ export default function ContactPage() {
                       placeholder="Please provide details about your inquiry..."
                       className={cn(
                         storefrontInput,
-                        formErrors.message && "border-red-500 focus-visible:ring-red-500/20"
+                        "min-h-32",
+                        formErrors.message &&
+                          "border-red-500 focus-visible:ring-red-500/20"
                       )}
                     />
-                    {formErrors.message && (
-                      <p className="text-red-500 text-sm mt-1">{formErrors.message}</p>
-                    )}
+                    {formErrors.message ? (
+                      <p className="text-sm text-red-500">{formErrors.message}</p>
+                    ) : null}
                   </div>
 
-                  {/* Submit Button */}
                   <Button
                     type="submit"
                     className={cn(storefrontPrimaryBtn, "w-full cursor-pointer")}
@@ -547,7 +597,7 @@ export default function ContactPage() {
                   >
                     {isSubmitting ? (
                       <>
-                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                        <div className="mr-2 h-4 w-4 animate-spin rounded-full border-b-2 border-white" />
                         Sending Message...
                       </>
                     ) : (

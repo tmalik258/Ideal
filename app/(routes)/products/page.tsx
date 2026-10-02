@@ -14,6 +14,8 @@ import {
 } from "./_components/products-filter-types";
 import { useProducts } from "@/lib/hooks/useProducts";
 import { useFilters } from "@/lib/hooks/useFilters";
+import { storefrontContainer } from "@/lib/storefront/surface";
+import { cn } from "@/lib/utils";
 
 const DEFAULT_FILTERS: ProductsFiltersState = {
   search: "",
@@ -169,7 +171,7 @@ function ProductsContent() {
 
   return (
     <div className="min-h-screen bg-brand-ivory pt-[var(--site-chrome-height,4rem)]">
-      <div className="mx-auto max-w-7xl px-4 py-10 lg:px-6 lg:py-14">
+      <div className={cn(storefrontContainer, "py-10 lg:py-14")}>
         <div id="products-section" className="space-y-8 md:space-y-10">
           <ProductsToolbar
             title={title}

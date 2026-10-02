@@ -11,14 +11,7 @@ import { Trash2, Plus, Minus, Heart, ShoppingBag } from "lucide-react";
 import { useCartStore } from "@/lib/stores";
 import { toast } from "sonner";
 import { formatStorefrontPrice } from "@/lib/site-metadata";
-import {
-  storefrontCard,
-  storefrontEyebrow,
-  storefrontOutlineBtn,
-  storefrontPage,
-  storefrontPrimaryBtn,
-  storefrontTitle,
-} from "@/lib/storefront/surface";
+import { storefrontCard, storefrontEyebrow, storefrontOutlineBtn, storefrontPage, storefrontPrimaryBtn, storefrontTitle, storefrontContainer } from "@/lib/storefront/surface";
 import { cn } from "@/lib/utils";
 
 export default function CartPage() {
@@ -50,9 +43,6 @@ export default function CartPage() {
     }
   };
 
-  const taxVat = Math.round(subtotal * 0.15);
-  const finalTotal = subtotal + taxVat;
-
   if (loading) {
     return <CartSkeleton />;
   }
@@ -60,7 +50,7 @@ export default function CartPage() {
   if (error) {
     return (
       <div className={storefrontPage}>
-        <div className="mx-auto max-w-7xl px-4 py-16">
+        <div className={cn(storefrontContainer, "py-16")}>
           <ErrorComponent
             title="Cart Error"
             message={error}
@@ -74,7 +64,7 @@ export default function CartPage() {
   if (cartItems.length === 0) {
     return (
       <div className={storefrontPage}>
-        <div className="mx-auto max-w-7xl px-4 py-16">
+        <div className={cn(storefrontContainer, "py-16")}>
           <div className="mx-auto max-w-md text-center">
             <div className={cn(storefrontCard, "mb-8 p-10")}>
               <ShoppingBag className="mx-auto mb-6 h-16 w-16 text-brand-forest/35" />
@@ -95,7 +85,7 @@ export default function CartPage() {
 
   return (
     <div className={storefrontPage}>
-      <div className="mx-auto max-w-7xl px-4 py-10 lg:px-6 lg:py-14">
+      <div className={cn(storefrontContainer, "py-10 lg:py-14")}>
         <header className="mb-10">
           <p className={storefrontEyebrow}>Cart</p>
           <h1 className={storefrontTitle}>Your bag</h1>
@@ -209,14 +199,10 @@ export default function CartPage() {
                     <span className="text-foreground/60">Subtotal ({itemCount})</span>
                     <span className="font-medium">{formatStorefrontPrice(subtotal)}</span>
                   </div>
-                  <div className="flex justify-between text-sm text-foreground/60">
-                    <span>Tax / VAT</span>
-                    <span>{formatStorefrontPrice(taxVat)}</span>
-                  </div>
                   <Separator className="bg-brand-forest/10" />
                   <div className="flex justify-between font-serif text-lg font-semibold">
                     <span>Total</span>
-                    <span>{formatStorefrontPrice(finalTotal)}</span>
+                    <span>{formatStorefrontPrice(subtotal)}</span>
                   </div>
                 </div>
 

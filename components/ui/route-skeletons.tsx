@@ -1,11 +1,13 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { storefrontContainer } from "@/lib/storefront/surface";
+import { cn } from "@/lib/utils";
 
 // Cart Page Skeleton
 export function CartSkeleton() {
   return (
     <div className="min-h-screen bg-brand-ivory pt-[var(--site-chrome-height,4rem)]">
-      <div className="container mx-auto px-4 py-8">
+      <div className={cn(storefrontContainer, "py-8")}>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Cart Items */}
         <div className="lg:col-span-2 space-y-4">
@@ -65,7 +67,7 @@ export function CartSkeleton() {
 export const ProductsPageSkeleton = () => {
   return (
     <div className="min-h-screen bg-brand-ivory pt-[var(--site-chrome-height,4rem)]">
-      <div className="mx-auto max-w-7xl px-4 py-10 lg:px-6 lg:py-14">
+      <div className={cn(storefrontContainer, "py-10 lg:py-14")}>
         <div className="space-y-8 md:space-y-10">
           <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
             <div className="max-w-2xl space-y-3">
@@ -101,7 +103,7 @@ export const ProductsPageSkeleton = () => {
 export function CheckoutSkeleton() {
   return (
     <div className="min-h-screen bg-brand-ivory pt-[var(--site-chrome-height,4rem)]">
-      <div className="container mx-auto px-4 py-8">
+      <div className={cn(storefrontContainer, "py-8")}>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Checkout Form */}
         <div className="space-y-6">
@@ -196,7 +198,7 @@ export function CheckoutSkeleton() {
 export function ContactSkeleton() {
   return (
     <div className="min-h-screen bg-brand-ivory pt-[var(--site-chrome-height,4rem)]">
-      <div className="container mx-auto px-4 py-8">
+      <div className={cn(storefrontContainer, "py-8")}>
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
           <Skeleton className="h-10 w-48 mx-auto mb-4" />
@@ -259,7 +261,7 @@ export { MyAccountSkeleton } from "@/app/(routes)/my-account/_components/my-acco
 export function WishlistSkeleton() {
   return (
     <div className="min-h-screen bg-brand-ivory pt-[var(--site-chrome-height,4rem)]">
-      <div className="mx-auto max-w-7xl px-4 py-10 lg:px-6 lg:py-14">
+      <div className={cn(storefrontContainer, "py-10 lg:py-14")}>
         <div className="mb-10 space-y-3">
           <Skeleton className="h-3 w-16 bg-brand-forest/10" />
           <Skeleton className="h-10 w-40 bg-brand-forest/10" />
@@ -287,7 +289,7 @@ export function WishlistSkeleton() {
 export function TrackOrderSkeleton() {
   return (
     <div className="min-h-screen bg-brand-ivory pt-[var(--site-chrome-height,4rem)]">
-      <div className="container mx-auto px-4 py-8">
+      <div className={cn(storefrontContainer, "py-8")}>
       <div className="max-w-4xl mx-auto">
         <div className="mb-8 space-y-2">
           <Skeleton className="h-9 w-48 bg-brand-forest/10" />

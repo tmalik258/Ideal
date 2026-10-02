@@ -1,5 +1,7 @@
 import { RefreshCw, Shield, Truck } from "lucide-react";
 import type { TrustBadge } from "@/lib/storefront/get-home-data";
+import { storefrontContainer } from "@/lib/storefront/surface";
+import { cn } from "@/lib/utils";
 
 const DEFAULT_BADGES: TrustBadge[] = [
   { icon: "truck", label: "Free shipping", sub: "On qualifying orders" },
@@ -27,7 +29,7 @@ export function StorefrontTrustRow({ badges }: Props) {
       className="border-y border-brand-forest/10 bg-white py-14 md:py-16"
       aria-label="Store policies"
     >
-      <div className="mx-auto grid max-w-7xl gap-10 px-4 sm:grid-cols-3 sm:gap-8">
+      <div className={cn(storefrontContainer, "grid gap-10 sm:grid-cols-3 sm:gap-8")}>
         {rows.map((b, i) => (
           <div
             key={`${b.label}-${i}`}

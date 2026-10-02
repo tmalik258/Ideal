@@ -6,14 +6,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import {
-  storefrontCard,
-  storefrontEyebrow,
-  storefrontOutlineBtn,
-  storefrontPage,
-  storefrontPrimaryBtn,
-  storefrontTitle,
-} from "@/lib/storefront/surface";
+import { storefrontCard, storefrontEyebrow, storefrontOutlineBtn, storefrontPage, storefrontPrimaryBtn, storefrontTitle, storefrontContainer } from "@/lib/storefront/surface";
 import { cn } from "@/lib/utils";
 
 const faqSections = [
@@ -82,7 +75,7 @@ const faqSections = [
 export default function FaqPage() {
   return (
     <div className={storefrontPage}>
-      <div className="container mx-auto px-4 py-12 md:py-16">
+      <div className={cn(storefrontContainer, "py-12 md:py-16")}>
         <header className="mx-auto mb-10 max-w-2xl text-center">
           <p className={storefrontEyebrow}>Help</p>
           <h1 className={storefrontTitle}>Frequently asked questions</h1>

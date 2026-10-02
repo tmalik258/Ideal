@@ -1,10 +1,11 @@
 import { features } from "./about-data";
 import { SITE_NAME } from "@/lib/site-metadata";
+import { storefrontContainer } from "@/lib/storefront/surface";
 
 export function AboutFeaturesSection() {
   return (
     <section className="border-t border-brand-forest/10 bg-brand-champagne/20 py-16 md:py-20">
-      <div className="mx-auto max-w-7xl px-4">
+      <div className={storefrontContainer}>
         <header className="mb-12 text-center">
           <h2 className="font-serif text-3xl font-semibold tracking-tight text-foreground md:text-4xl">
             Why Choose {SITE_NAME}?

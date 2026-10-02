@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { ProductWithRelations } from "@/lib/hooks/useProductQueries";
 import { formatStorefrontPrice } from "@/lib/site-metadata";
+import { storefrontContainer } from "@/lib/storefront/surface";
 
 type Props = {
   title: string;
@@ -17,7 +18,7 @@ export function StorefrontHeroSecondaryStrip({ title, subtitle, products }: Prop
       className="border-b border-brand-forest/10 bg-brand-ivory py-6 md:py-8"
       aria-label={title}
     >
-      <div className="mx-auto max-w-7xl px-4">
+      <div className={storefrontContainer}>
         <div className="mb-4 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <h2 className="font-serif text-lg font-semibold tracking-tight text-foreground md:text-xl">

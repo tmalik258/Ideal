@@ -1,11 +1,12 @@
 import Image from "next/image";
 import { teamMembers } from "./about-data";
 import { SITE_NAME } from "@/lib/site-metadata";
+import { storefrontContainer } from "@/lib/storefront/surface";
 
 export function AboutTeamSection() {
   return (
     <section className="py-16 md:py-20">
-      <div className="mx-auto max-w-7xl px-4">
+      <div className={storefrontContainer}>
         <header className="mb-12 text-center">
           <h2 className="font-serif text-3xl font-semibold tracking-tight text-foreground md:text-4xl">
             The People Behind {SITE_NAME}

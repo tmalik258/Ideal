@@ -1,6 +1,7 @@
 "use client";
 
 import { StorefrontSectionHeader } from "./storefront-section-header";
+import { storefrontContainer } from "@/lib/storefront/surface";
 
 type ReviewCard = {
   id: string;
@@ -23,7 +24,7 @@ export function StorefrontHomeTestimonials({ title, subtitle, testimonials }: Pr
 
   return (
     <section className="bg-brand-ivory py-20 md:py-28" aria-label="Customer reviews">
-      <div className="mx-auto max-w-7xl px-4">
+      <div className={storefrontContainer}>
         <StorefrontSectionHeader eyebrow="Voices" title={title} subtitle={subtitle} />
 
         <div className="grid gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:gap-16">

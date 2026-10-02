@@ -30,7 +30,8 @@ import { useAuth } from "@/lib/hooks/useAuth";
 import { ProfileInfoCard } from "./_components/profile-info-card";
 import { UserProfile } from "@/lib/types";
 import { AxiosError } from "axios";
-import { storefrontPage } from "@/lib/storefront/surface";
+import { storefrontPage, storefrontContainer } from "@/lib/storefront/surface";
+import { cn } from "@/lib/utils";
 
 export default function MyAccountPage() {
   const { profile, isAuthenticated, refreshProfile } = useAuth();
@@ -293,7 +294,7 @@ export default function MyAccountPage() {
       {/* Error Alert */}
       {lastError && !isLoadingProfile && (
         <div className="bg-red-600 text-white p-2 text-center text-sm">
-          <div className="container mx-auto flex items-center justify-center space-x-2">
+          <div className={cn(storefrontContainer, "flex items-center justify-center space-x-2")}>
             <AlertCircle className="h-4 w-4" />
             <span>
               {ErrorClassifier.isNetworkError(lastError)

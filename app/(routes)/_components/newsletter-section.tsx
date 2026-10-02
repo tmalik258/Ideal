@@ -3,6 +3,7 @@
 import axios from "axios";
 import { useMemo, useState } from "react";
 import { SITE_NAME } from "@/lib/site-metadata";
+import { storefrontContainer } from "@/lib/storefront/surface";
 
 interface NewsletterSectionProps {
   className?: string;
@@ -63,7 +64,7 @@ export default function NewsletterSection({
       className={`bg-brand-forest py-20 text-brand-champagne md:py-28 ${className}`}
       aria-label="Newsletter subscription"
     >
-      <div className="mx-auto max-w-7xl px-4">
+      <div className={storefrontContainer}>
         <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end lg:gap-16">
           <div>
             <p className="mb-4 font-serif text-[0.65rem] font-semibold tracking-[0.28em] text-brand-champagne/55 uppercase">

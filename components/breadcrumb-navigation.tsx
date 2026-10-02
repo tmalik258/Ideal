@@ -8,15 +8,17 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { storefrontContainer } from "@/lib/storefront/surface";
+import { cn } from "@/lib/utils";
 
-interface BreadcrumbItem {
+interface BreadcrumbNavItem {
   label: string;
   href?: string;
   isActive?: boolean;
 }
 
 interface BreadcrumbNavigationProps {
-  items: BreadcrumbItem[];
+  items: BreadcrumbNavItem[];
   className?: string;
 }
 
@@ -25,7 +27,7 @@ export default function BreadcrumbNavigation({
   className = "",
 }: BreadcrumbNavigationProps) {
   return (
-    <div className={`container mx-auto ${className}`}>
+    <div className={cn(storefrontContainer, className)}>
       <Breadcrumb>
         <BreadcrumbList className="text-zinc-500">
           {items.map((item, index) => (
@@ -38,7 +40,7 @@ export default function BreadcrumbNavigation({
                 ) : (
                   <BreadcrumbLink
                     href={item.href || "/"}
-                    className="text-zinc-500 hover:text-zinc-900 cursor-pointer"
+                    className="cursor-pointer text-zinc-500 hover:text-zinc-900"
                   >
                     {item.label}
                   </BreadcrumbLink>

@@ -10,13 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import {
-  storefrontCard,
-  storefrontEyebrow,
-  storefrontOutlineBtn,
-  storefrontPage,
-  storefrontTitle,
-} from '@/lib/storefront/surface';
+import { storefrontCard, storefrontEyebrow, storefrontOutlineBtn, storefrontPage, storefrontTitle, storefrontContainer } from "@/lib/storefront/surface";
 import type { OrderFilters } from '@/lib/types/order';
 import { 
   PackageIcon, 
@@ -82,7 +76,7 @@ export default function OrdersPage() {
 
   if (isError) {
     return (
-      <div className={cn(storefrontPage, "container mx-auto px-4 py-8")}>
+      <div className={cn(storefrontPage, storefrontContainer, "py-8")}>
         <BreadcrumbNavigation items={breadcrumbItems} />
         
         <div className="mt-8">
@@ -110,7 +104,7 @@ export default function OrdersPage() {
   }
 
   return (
-    <div className={cn(storefrontPage, "container mx-auto px-4 py-8")}>
+    <div className={cn(storefrontPage, storefrontContainer, "py-8")}>
       {/* Breadcrumb Navigation */}
       <BreadcrumbNavigation items={breadcrumbItems} />
 

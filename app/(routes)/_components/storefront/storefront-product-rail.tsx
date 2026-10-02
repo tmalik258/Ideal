@@ -7,6 +7,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { ProductWithRelations } from "@/lib/hooks/useProductQueries";
 import { formatStorefrontPrice } from "@/lib/site-metadata";
 import { StorefrontSectionHeader } from "./storefront-section-header";
+import { storefrontContainer } from "@/lib/storefront/surface";
 
 type Props = {
   title: string;
@@ -33,7 +34,7 @@ export function StorefrontProductRail({
 
   return (
     <section className="py-20 md:py-28" aria-label={title}>
-      <div className="mx-auto max-w-7xl px-4">
+      <div className={storefrontContainer}>
         <StorefrontSectionHeader
           eyebrow="Collection"
           title={title}

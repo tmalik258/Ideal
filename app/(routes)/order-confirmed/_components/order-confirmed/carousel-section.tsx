@@ -14,6 +14,7 @@ import { Star, Heart, ShoppingCart } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { SITE_CURRENCY } from "@/lib/site-metadata";
+import { storefrontContainer } from "@/lib/storefront/surface";
 
 interface Product {
   id: string;
@@ -68,7 +69,7 @@ export function CarouselSection({
 
   return (
     <section className="py-16 px-4 sm:px-6 lg:px-8">
-      <div className="container mx-auto">
+      <div className={storefrontContainer}>
         {/* Section Header */}
         <div className="text-center mb-12">
           <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">

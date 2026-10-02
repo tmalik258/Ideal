@@ -1,10 +1,12 @@
 import Image from "next/image";
 import { SITE_NAME } from "@/lib/site-metadata";
+import { storefrontContainer } from "@/lib/storefront/surface";
+import { cn } from "@/lib/utils";
 
 export function AboutStorySection() {
   return (
     <section className="py-16 md:py-20">
-      <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-4 lg:grid-cols-2 lg:gap-16">
+      <div className={cn(storefrontContainer, "grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16")}>
         <div className="order-2 flex justify-center lg:order-1 lg:justify-start">
           <div className="relative overflow-hidden rounded-none border border-brand-forest/15 bg-brand-champagne/25 p-4 shadow-none">
             <Image

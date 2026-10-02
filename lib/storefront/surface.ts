@@ -3,6 +3,13 @@
 export const storefrontPage =
   "min-h-screen bg-brand-ivory pt-[var(--site-chrome-height,4rem)]";
 
+/** Outer chrome gutters — keep in sync with header padding. */
+export const storefrontChromeGutter = "px-3 sm:px-4 md:px-6";
+
+/** Matches navbar pill width + outer chrome gutters. */
+export const storefrontContainer =
+  "mx-auto w-full max-w-6xl px-3 sm:px-4 md:px-6";
+
 export const storefrontCard =
   "rounded-none border border-brand-forest/15 bg-brand-ivory shadow-none";
 

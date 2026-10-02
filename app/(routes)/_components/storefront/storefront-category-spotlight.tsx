@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Category, HomeCategorySpotlight } from "@prisma/client";
 import { StorefrontSectionHeader } from "./storefront-section-header";
+import { storefrontContainer } from "@/lib/storefront/surface";
 
 type Row = HomeCategorySpotlight & { category: Category };
 
@@ -16,7 +17,7 @@ export function StorefrontCategorySpotlight({ title, subtitle, rows }: Props) {
 
   return (
     <section className="border-y border-brand-forest/10 bg-white py-20 md:py-28" aria-label={title}>
-      <div className="mx-auto max-w-7xl px-4">
+      <div className={storefrontContainer}>
         <StorefrontSectionHeader
           eyebrow="Shop"
           title={title}

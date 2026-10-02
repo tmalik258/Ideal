@@ -1,4 +1,6 @@
 import { UserInitialsAvatar } from "@/components/ui/user-initials-avatar";
+import { storefrontContainer } from "@/lib/storefront/surface";
+import { cn } from "@/lib/utils";
 
 const ProfileHeader = ({
   name,
@@ -8,7 +10,7 @@ const ProfileHeader = ({
   email?: string;
 }) => {
   return (
-    <div className="container mx-auto px-4 mb-8">
+    <div className={cn(storefrontContainer, "mb-8")}>
       <div className="mb-8 flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <UserInitialsAvatar name={name} email={email} size="xl" />

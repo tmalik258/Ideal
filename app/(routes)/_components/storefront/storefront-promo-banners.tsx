@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { PromoBannerLayout } from "@prisma/client";
+import { storefrontContainer } from "@/lib/storefront/surface";
+import { cn } from "@/lib/utils";
 
 type Banner = {
   id: string;
@@ -26,7 +28,7 @@ export function StorefrontPromoBanners({ banners }: Props) {
 
         if (isFull) {
           return (
-            <section key={b.id} className="relative mx-auto max-w-7xl overflow-hidden px-4">
+            <section key={b.id} className={cn(storefrontContainer, "relative overflow-hidden")}>
               <Link
                 href={b.href}
                 className="relative block aspect-[21/9] min-h-[240px] overflow-hidden bg-brand-forest cursor-pointer md:min-h-[320px]"
@@ -57,7 +59,7 @@ export function StorefrontPromoBanners({ banners }: Props) {
         }
 
         return (
-          <section key={b.id} className="mx-auto max-w-7xl px-4" aria-label={b.title}>
+          <section key={b.id} className={storefrontContainer} aria-label={b.title}>
             <div className="grid overflow-hidden bg-white md:grid-cols-2">
               <div
                 className={`relative aspect-[4/3] md:aspect-auto md:min-h-[380px] ${imageLeft ? "md:order-first" : "md:order-last"}`}

@@ -1,6 +1,8 @@
 "use client";
 
 import { Skeleton } from "@/components/ui/skeleton";
+import { storefrontContainer } from "@/lib/storefront/surface";
+import { cn } from "@/lib/utils";
 
 const sk = "bg-brand-forest/10";
 
@@ -122,7 +124,7 @@ export function RelatedProductsSkeleton() {
 export function ProductDetailSkeleton() {
   return (
     <div className="min-h-screen bg-brand-ivory pt-[var(--site-chrome-height,4rem)] pb-8">
-      <div className="mx-auto max-w-7xl space-y-10 px-4 pt-10 lg:px-6">
+      <div className={cn(storefrontContainer, "space-y-10 pt-10")}>
         <div className="grid grid-cols-1 items-start gap-6 md:grid-cols-2 md:gap-8">
           <ProductImageSkeleton />
           <ProductInfoSkeleton />

@@ -1,12 +1,12 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { storefrontCard, storefrontPage } from "@/lib/storefront/surface";
+import { storefrontCard, storefrontPage, storefrontContainer } from "@/lib/storefront/surface";
 import { cn } from "@/lib/utils";
 
 export function ContactPageSkeleton() {
   return (
     <div className={storefrontPage}>
-      <div className="container mx-auto px-4 py-8">
+      <div className={cn(storefrontContainer, "py-8")}>
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
           <div className="lg:col-span-1">
             <Card className={cn(storefrontCard, "h-fit")}>

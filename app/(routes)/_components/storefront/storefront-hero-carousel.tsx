@@ -10,6 +10,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import gsap from "gsap";
 import { cn } from "@/lib/utils";
 import { prefersReducedMotion } from "@/lib/utils/prefers-reduced-motion";
+import { storefrontContainer } from "@/lib/storefront/surface";
 
 type Props = {
   slides: HeroSlide[];
@@ -69,7 +70,7 @@ export function StorefrontHeroCarousel({ slides }: Props) {
   if (!slides.length) {
     return (
       <section className="relative bg-zinc-100 py-24 md:py-32">
-        <div className="mx-auto max-w-7xl px-4 text-center">
+        <div className={cn(storefrontContainer, "text-center")}>
           <p className="text-zinc-600">Add hero slides in Admin → Storefront.</p>
         </div>
       </section>

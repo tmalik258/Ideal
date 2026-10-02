@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { User } from "lucide-react";
-import { storefrontCard, storefrontInput } from "@/lib/storefront/surface";
+import { storefrontCard, storefrontInput, storefrontContainer } from "@/lib/storefront/surface";
 import { cn } from "@/lib/utils";
 
 interface ProfileInfoCardProps {
@@ -16,7 +16,7 @@ interface ProfileInfoCardProps {
 
 export const ProfileInfoCard = ({ displayProfile }: ProfileInfoCardProps) => {
   return (
-    <div className="container mx-auto space-y-8 px-4 pb-12">
+    <div className={cn(storefrontContainer, "space-y-8 pb-12")}>
       <Card className={storefrontCard}>
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-2xl text-foreground">

@@ -38,6 +38,7 @@ import { UserInitialsAvatar } from "@/components/ui/user-initials-avatar";
 import { UserRole } from "@prisma/client";
 import type { NavCategory } from "@/lib/storefront/get-nav-categories";
 import { LOGO_PATH, SITE_NAME } from "@/lib/site-metadata";
+import { storefrontChromeGutter } from "@/lib/storefront/surface";
 import { cn } from "@/lib/utils";
 
 type HeaderProps = {
@@ -92,13 +93,14 @@ export function Header({ navCategories = [] }: HeaderProps) {
   }));
 
   return (
-    <header className="w-full bg-transparent px-3 pb-2 pt-2 sm:px-4 md:px-6">
+    <header className={cn("w-full bg-transparent pb-2 pt-2", storefrontChromeGutter)}>
       <div
-        className={`mx-auto flex h-14 max-w-6xl items-center justify-between gap-3 rounded-2xl border px-3 transition-all duration-300 sm:h-16 sm:px-4 ${
+        className={cn(
+          "mx-auto flex h-14 max-w-6xl items-center justify-between gap-3 rounded-2xl border px-3 transition-all duration-300 sm:h-16 sm:px-4",
           isScrolled
             ? "border-white/40 bg-white/35 shadow-lg shadow-zinc-900/5 backdrop-blur-2xl"
             : "border-white/30 bg-white/20 shadow-md shadow-zinc-900/5 backdrop-blur-2xl"
-        }`}
+        )}
       >
           <Link href="/" className="flex shrink-0 items-center cursor-pointer">
             <div className="font-bold text-2xl font-serif text-primary">

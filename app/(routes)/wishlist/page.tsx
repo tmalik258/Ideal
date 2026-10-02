@@ -5,14 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Heart, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { useWishlistStore } from "@/lib/stores/wishlist-store";
-import {
-  storefrontCard,
-  storefrontEyebrow,
-  storefrontOutlineBtn,
-  storefrontPage,
-  storefrontPrimaryBtn,
-  storefrontTitle,
-} from "@/lib/storefront/surface";
+import { storefrontCard, storefrontEyebrow, storefrontOutlineBtn, storefrontPage, storefrontPrimaryBtn, storefrontTitle, storefrontContainer } from "@/lib/storefront/surface";
 import { cn } from "@/lib/utils";
 
 export default function WishlistPage() {
@@ -20,7 +13,7 @@ export default function WishlistPage() {
 
   return (
     <div className={storefrontPage}>
-      <div className="mx-auto max-w-7xl px-4 py-10 pb-16 lg:px-6 lg:py-14">
+      <div className={cn(storefrontContainer, "py-10 pb-16 lg:py-14")}>
         <header className="mb-10">
           <p className={storefrontEyebrow}>Saved</p>
           <h1 className={storefrontTitle}>Your wishlist</h1>

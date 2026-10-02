@@ -13,7 +13,7 @@ import {
   ProductDetailSkeleton,
 } from "../_components/product-skeleton";
 import { SITE_CURRENCY, LOGO_PATH } from "@/lib/site-metadata";
-import { storefrontCard, storefrontPage } from "@/lib/storefront/surface";
+import { storefrontCard, storefrontPage, storefrontContainer } from "@/lib/storefront/surface";
 import { parseProductDescription } from "@/lib/storefront/parse-product-description";
 import { cn } from "@/lib/utils";
 
@@ -253,7 +253,7 @@ export default function ProductDetailPage() {
   if (productError || !product) {
     return (
       <div className={storefrontPage}>
-        <div className="container mx-auto px-4 py-8">
+        <div className={cn(storefrontContainer, "py-8")}>
           <ProductError />
         </div>
       </div>
@@ -262,7 +262,7 @@ export default function ProductDetailPage() {
 
   return (
     <div className={cn(storefrontPage, "pb-12")}>
-      <div className="mx-auto max-w-7xl space-y-12 px-4 pt-10 lg:px-6">
+      <div className={cn(storefrontContainer, "space-y-12 pt-10")}>
         <div className="grid grid-cols-1 items-start gap-6 md:grid-cols-2 md:gap-8">
           {product.images.length > 0 ? (
             <ProductImages

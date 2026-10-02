@@ -3,6 +3,7 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { cn } from "@/lib/utils";
 import { StorefrontReveal } from "../_components/storefront/storefront-reveal";
+import { storefrontContainer } from "@/lib/storefront/surface";
 
 export const dynamic = "force-dynamic";
 
@@ -21,7 +22,7 @@ export default async function CollectionsPage() {
 
   return (
     <div className="min-h-screen bg-brand-ivory pt-[var(--site-chrome-height,4rem)]">
-      <div className="mx-auto max-w-7xl px-4 py-14 md:py-20 lg:px-6">
+      <div className={cn(storefrontContainer, "py-14 md:py-20")}>
         <header className="mb-12 flex flex-col gap-6 md:mb-16 md:flex-row md:items-end md:justify-between">
           <div className="max-w-2xl">
             <p className="mb-3 font-serif text-[0.65rem] font-semibold tracking-[0.28em] text-brand-forest/55 uppercase">
