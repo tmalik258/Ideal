@@ -59,6 +59,7 @@ export default function WishlistPage() {
                     price: item.price,
                     image: item.image,
                     inStock: item.inStock,
+                    rating: 0,
                   }}
                 />
               ))}
