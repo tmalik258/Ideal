@@ -3,13 +3,13 @@ import { SITE_NAME } from "@/lib/site-metadata";
 
 export function AboutFeaturesSection() {
   return (
-    <section className="border-t border-zinc-100 bg-white py-16 md:py-20">
+    <section className="border-t border-brand-forest/10 bg-brand-champagne/20 py-16 md:py-20">
       <div className="mx-auto max-w-7xl px-4">
         <header className="mb-12 text-center">
-          <h2 className="text-3xl font-semibold tracking-tight text-zinc-900 md:text-4xl">
+          <h2 className="font-serif text-3xl font-semibold tracking-tight text-foreground md:text-4xl">
             Why Choose {SITE_NAME}?
           </h2>
-          <p className="mx-auto mt-3 max-w-2xl text-zinc-600">
+          <p className="mx-auto mt-3 max-w-2xl text-foreground/60">
             Shopping that is simple, secure, and built around you.
           </p>
         </header>
@@ -22,8 +22,10 @@ export function AboutFeaturesSection() {
                 <div className="flex h-14 w-14 items-center justify-center rounded-full bg-brand-forest text-brand-champagne">
                   <Icon className="h-6 w-6" aria-hidden />
                 </div>
-                <h3 className="text-lg font-semibold text-zinc-900">{feature.title}</h3>
-                <p className="text-sm text-zinc-600 md:text-base">{feature.description}</p>
+                <h3 className="font-serif text-lg font-semibold text-foreground">
+                  {feature.title}
+                </h3>
+                <p className="text-sm text-foreground/60 md:text-base">{feature.description}</p>
               </div>
             );
           })}

@@ -1,4 +1,24 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
+
+function getSupabaseImageHostname(): string | null {
+  const projectId = process.env.SUPABASE_PROJECT_ID?.trim();
+  if (projectId) {
+    return `${projectId}.supabase.co`;
+  }
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
+  if (!supabaseUrl || supabaseUrl.includes('${')) {
+    return null;
+  }
+
+  try {
+    return new URL(supabaseUrl).hostname;
+  } catch {
+    return null;
+  }
+}
+
+const supabaseHostname = getSupabaseImageHostname();
 
 const nextConfig: NextConfig = {
   // Image optimization configuration
@@ -16,12 +36,16 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/**',
       },
-      {
-        protocol: 'https',
-        hostname: 'ktifuxnppfxhinwydvbf.supabase.co',
-        port: '',
-        pathname: '/**',
-      },
+      ...(supabaseHostname
+        ? [
+            {
+              protocol: 'https' as const,
+              hostname: supabaseHostname,
+              port: '',
+              pathname: '/**',
+            },
+          ]
+        : []),
       {
         protocol: 'https',
         hostname: 'via.placeholder.com',
@@ -48,7 +72,7 @@ const nextConfig: NextConfig = {
   // Production optimizations
   compress: true,
   poweredByHeader: false,
-  
+
   // Security headers
   async headers() {
     return [

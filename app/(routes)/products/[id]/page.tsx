@@ -13,6 +13,9 @@ import {
   ProductDetailSkeleton,
 } from "../_components/product-skeleton";
 import { SITE_CURRENCY, LOGO_PATH } from "@/lib/site-metadata";
+import { storefrontCard, storefrontPage } from "@/lib/storefront/surface";
+import { parseProductDescription } from "@/lib/storefront/parse-product-description";
+import { cn } from "@/lib/utils";
 
 // Transform hook product data to component format
 const transformProduct = (hookProduct: {
@@ -35,6 +38,13 @@ const transformProduct = (hookProduct: {
 }) => {
   if (!hookProduct) return null;
 
+  const parsed = parseProductDescription(hookProduct.description);
+  const longDescription =
+    parsed.prose ||
+    (parsed.attributes.length === 0
+      ? hookProduct.description || undefined
+      : undefined);
+
   return {
     id: hookProduct.id,
     name: hookProduct.name,
@@ -42,8 +52,9 @@ const transformProduct = (hookProduct: {
     originalPrice: hookProduct.originalPrice
       ? `${hookProduct.originalPrice} ${SITE_CURRENCY}`
       : undefined,
-    description: hookProduct.description || null,
-    longDescription: hookProduct.description || undefined,
+    description: longDescription || null,
+    longDescription,
+    attributes: parsed.attributes,
     rating: hookProduct.averageRating || 0,
     reviewCount: hookProduct.reviewCount || 0,
     inStock: hookProduct.inStock ?? true,
@@ -60,14 +71,12 @@ const transformProduct = (hookProduct: {
           value: getColorValue(variant.value),
         })) || [],
     keyFeatures: [],
-    specifications: [],
+    specifications: parsed.attributes,
     images: (() => {
       const allImages: string[] = [];
-      // Always add product.image as the first image if it exists
       if (hookProduct.image) {
         allImages.push(hookProduct.image);
       }
-      // Add other images from the images array, excluding duplicates
       if (hookProduct.images && hookProduct.images.length > 0) {
         hookProduct.images.forEach((img) => {
           if (img && !allImages.includes(img)) {
@@ -243,7 +252,7 @@ export default function ProductDetailPage() {
 
   if (productError || !product) {
     return (
-      <div className="min-h-screen bg-zinc-50 pt-[var(--site-chrome-height,4rem)]">
+      <div className={storefrontPage}>
         <div className="container mx-auto px-4 py-8">
           <ProductError />
         </div>
@@ -252,17 +261,17 @@ export default function ProductDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-50 pt-[var(--site-chrome-height,4rem)] pb-8">
-      <div className="container mx-auto space-y-8 px-4 pt-8">
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-          {product.images ? (
+    <div className={cn(storefrontPage, "pb-12")}>
+      <div className="mx-auto max-w-7xl space-y-12 px-4 pt-10 lg:px-6">
+        <div className="grid grid-cols-1 items-start gap-6 md:grid-cols-2 md:gap-8">
+          {product.images.length > 0 ? (
             <ProductImages
               images={product.images}
               productName={product.name}
               loading={false}
             />
           ) : (
-            <div className="rounded-2xl border border-zinc-200 bg-white p-3 text-center text-zinc-600 shadow-sm">
+            <div className={cn(storefrontCard, "flex aspect-[3/4] w-full items-center justify-center text-foreground/55")}>
               No Image
             </div>
           )}

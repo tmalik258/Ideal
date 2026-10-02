@@ -1,217 +1,82 @@
 "use client";
 
-import { useWishlistStore } from "@/lib/stores/wishlist-store";
-import { useCartStore } from "@/lib/stores/cart-store";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { ProductCard } from "@/components/product-card";
 import { Button } from "@/components/ui/button";
-import { Heart, ArrowLeft, ShoppingBag, Trash2 } from "lucide-react";
-import Image from "next/image";
+import { Heart, ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { toast } from "sonner";
-import { SITE_CURRENCY } from "@/lib/site-metadata";
+import { useWishlistStore } from "@/lib/stores/wishlist-store";
+import {
+  storefrontCard,
+  storefrontEyebrow,
+  storefrontOutlineBtn,
+  storefrontPage,
+  storefrontPrimaryBtn,
+  storefrontTitle,
+} from "@/lib/storefront/surface";
+import { cn } from "@/lib/utils";
 
 export default function WishlistPage() {
-  const { items, removeItem, toggleItem } = useWishlistStore();
-  const { addItem: addToCart } = useCartStore();
-
-  const handleRemoveFromWishlist = (productId: string, productName: string) => {
-    removeItem(productId);
-    toast.success(`${productName} removed from wishlist`);
-  };
-
-  const handleAddToCart = async (item: {
-    id: string;
-    productId?: string;
-    name: string;
-    price: number;
-    image: string;
-    inStock: boolean;
-  }) => {
-    try {
-      // Check if item is in stock
-      if (!item.inStock) {
-        toast.error(`${item.name} is currently out of stock`);
-        return;
-      }
-
-      // Fetch product with variants
-      const response = await fetch(`/api/products/${item.productId || item.id}`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch product details');
-      }
-
-      const product = await response.json();
-      
-      // Check if product has variants
-      if (!product.variants || product.variants.length === 0) {
-        toast.error(`${item.name} has no available variants`);
-        return;
-      }
-
-      // Select the first variant
-      const firstVariant = product.variants[0];
-      
-      // Check variant stock
-      if (firstVariant.stock <= 0) {
-        toast.error(`${item.name} (${firstVariant.name}: ${firstVariant.value}) is out of stock`);
-        return;
-      }
-
-      // Create cart item with variant data
-      const cartItem = {
-        productId: item.productId || item.id,
-        id: firstVariant.id,
-        name: item.name,
-        price: firstVariant.price ? item.price + firstVariant.price : item.price, // Add variant price modifier to base price
-        image: item.image, // Use item image since variants don't have images
-        quantity: 1,
-        inStock: firstVariant.stock > 0,
-        size: firstVariant.name === 'Size' ? firstVariant.value : undefined,
-        color: firstVariant.name === 'Color' ? firstVariant.value : undefined,
-        variant: `${firstVariant.name}: ${firstVariant.value}`,
-      };
-
-      // Add to cart
-      addToCart(cartItem);
-      
-      toast.success(`${item.name} (${firstVariant.name}: ${firstVariant.value}) added to cart`);
-    } catch (error) {
-      console.error('Error adding item to cart:', error);
-      toast.error('Failed to add item to cart. Please try again.');
-    }
-  };
-
-  const breadcrumbItems = [
-    { label: "Home", href: "/" },
-    { label: "Wishlist", isActive: true },
-  ];
+  const { items } = useWishlistStore();
 
   return (
-    <div className="container mx-auto min-h-screen bg-zinc-50 pt-[var(--site-chrome-height,4rem)]">
-      {/* Removed HeroSection */}
-
-      {/* Wishlist Content */}
-      <div className="container mx-auto px-4 lg:px-0 pb-16">
-        <h2 className="text-3xl lg:text-4xl font-semibold text-zinc-900 mb-8">
-          Your Wishlist
-        </h2>
+    <div className={storefrontPage}>
+      <div className="mx-auto max-w-7xl px-4 py-10 pb-16 lg:px-6 lg:py-14">
+        <header className="mb-10">
+          <p className={storefrontEyebrow}>Saved</p>
+          <h1 className={storefrontTitle}>Your wishlist</h1>
+          {items.length > 0 && (
+            <p className="mt-2 text-sm text-foreground/55">
+              {items.length} {items.length === 1 ? "piece" : "pieces"} saved for later
+            </p>
+          )}
+        </header>
 
         {items.length === 0 ? (
-          <div className="text-center py-16">
-            <div className="mb-8">
-              <Heart className="w-24 h-24 text-zinc-300 mx-auto mb-4" />
-              <h3 className="text-2xl font-semibold text-zinc-900 mb-2">
+          <div className="mx-auto max-w-md text-center">
+            <div className={cn(storefrontCard, "mb-8 p-10")}>
+              <Heart className="mx-auto mb-6 h-16 w-16 text-brand-forest/35" />
+              <p className={storefrontEyebrow}>Wishlist</p>
+              <h2 className={cn(storefrontTitle, "mb-3 text-2xl md:text-3xl")}>
                 Your wishlist is empty
-              </h3>
-              <p className="text-zinc-600 mb-6">
-                Start adding products you love to your wishlist
+              </h2>
+              <p className="leading-relaxed text-foreground/55">
+                Start adding products you love — they&apos;ll appear here.
               </p>
-              <Link href="/products">
-                <Button className="bg-zinc-900 px-8 py-3 font-semibold text-white hover:bg-zinc-800 cursor-pointer">
-                  Browse Products
-                </Button>
-              </Link>
             </div>
+            <Button size="lg" className={cn(storefrontPrimaryBtn, "px-8")} asChild>
+              <Link href="/products">Browse products</Link>
+            </Button>
           </div>
         ) : (
           <>
-            {/* Product Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <div className="mb-10 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {items.map((item) => (
-                <Card
+                <ProductCard
                   key={item.id}
-                  className="group relative overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm transition-all duration-300 hover:shadow-md"
-                >
-                  <CardContent className="p-4">
-                    {/* Stock Badge */}
-                    <div className="absolute top-4 right-4 z-10">
-                      <Badge
-                        className={`px-3 py-1 text-sm font-medium rounded-none ${
-                          item.inStock
-                            ? "bg-zinc-900 text-white"
-                            : "bg-zinc-200 text-zinc-600"
-                        }`}
-                      >
-                        {item.inStock ? "In Stock" : "Out of Stock"}
-                      </Badge>
-                    </div>
-
-                    {/* Product Image */}
-                    <div className="relative mb-4">
-                      <Image
-                        src={item.image || "/logo_transparent.png"}
-                        alt={item.name}
-                        width={300}
-                        height={300}
-                        className="w-full h-64 object-cover rounded-xl"
-                      />
-                    </div>
-
-                    {/* Product Info */}
-                    <div className="space-y-2">
-                      <h3 className="text-lg font-bold text-zinc-900 line-clamp-2">
-                        {item.name}
-                      </h3>
-                      {/* <p className="text-gray-300 text-sm line-clamp-2">
-                        {item.description ||
-                          "Premium quality product with excellent features."}
-                      </p> */}
-
-                      {/* Price and Actions */}
-                      <div className="flex items-center justify-between pt-2">
-                        <span className="text-lg font-bold text-zinc-900">
-                          {item.price} {SITE_CURRENCY}
-                        </span>
-                        <div className="flex items-center gap-2">
-                          {/* Heart Icon */}
-                          <Button
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              handleRemoveFromWishlist(item.id, item.name);
-                            }}
-                            className="p-0 transition-all duration-200"
-                            variant="link"
-                          >
-                            <Trash2 className="w-5 h-5 text-black hover:text-black" />
-                          </Button>
-                          <Button
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              handleAddToCart(item);
-                            }}
-                            className="p-1 hover:bg-white/10 rounded transition-colors"
-                            variant="link"
-                          >
-                            <ShoppingBag className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                  product={{
+                    id: item.productId || item.id,
+                    name: item.name,
+                    price: item.price,
+                    image: item.image,
+                    inStock: item.inStock,
+                  }}
+                />
               ))}
             </div>
 
-            {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-between items-center">
-              <Link href="/my-account">
-                <Button
-                  variant="outline"
-                  className="flex cursor-pointer items-center gap-2 border-zinc-900 px-6 py-3 font-semibold text-zinc-900 hover:bg-zinc-900 hover:text-white"
-                >
-                  <ArrowLeft className="w-4 h-4 rotate-90" />
-                  Back to Profile
-                </Button>
-              </Link>
+            <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
+              <Button variant="outline" className={storefrontOutlineBtn} asChild>
+                <Link href="/my-account" className="flex cursor-pointer items-center gap-2">
+                  <ArrowLeft className="h-4 w-4" />
+                  Back to profile
+                </Link>
+              </Button>
 
-              <Link href="/products">
-                <Button className="bg-zinc-900 px-6 py-3 font-semibold text-white hover:bg-zinc-800 cursor-pointer">
-                  Continue Shopping
-                </Button>
-              </Link>
+              <Button className={storefrontPrimaryBtn} asChild>
+                <Link href="/products" className="cursor-pointer">
+                  Continue shopping
+                </Link>
+              </Button>
             </div>
           </>
         )}

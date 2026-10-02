@@ -10,6 +10,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { CartItem } from "@/lib/stores/cart-store";
 import { SITE_CURRENCY } from "@/lib/site-metadata";
+import {
+  storefrontCard,
+  storefrontInput,
+  storefrontOutlineBtn,
+} from "@/lib/storefront/surface";
+import { cn } from "@/lib/utils";
 
 interface OrderSummaryProps {
   cartItems: CartItem[];
@@ -43,9 +49,9 @@ export const OrderSummary = ({
   canUsePromo = true,
 }: OrderSummaryProps) => {
   return (
-    <Card className="sticky top-4 rounded-2xl border-zinc-200 bg-white shadow-sm">
+    <Card className={cn(storefrontCard, "sticky top-4")}>
       <CardHeader>
-        <CardTitle className="text-zinc-900">Order Summary</CardTitle>
+        <CardTitle className="font-serif text-foreground">Order Summary</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Order Items */}
@@ -53,7 +59,7 @@ export const OrderSummary = ({
           {cartItems.map((item) => (
             <div key={item.id} className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
-                <div className="relative h-12 w-12 flex-shrink-0 rounded-lg bg-zinc-100 p-2">
+                <div className="relative h-12 w-12 flex-shrink-0 rounded-lg bg-brand-champagne/50 p-2">
                   <Image
                     src={item.image}
                     alt={item.name}
@@ -62,17 +68,17 @@ export const OrderSummary = ({
                   />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <h4 className="text-sm font-medium text-zinc-900">
+                  <h4 className="text-sm font-medium text-foreground">
                     &quot;{item.name}&quot;
                   </h4>
-                  <p className="text-xs text-zinc-600">
+                  <p className="text-xs text-foreground/60">
                     {item.size && `Size: ${item.size}`}
                     {item.color && `, Color: ${item.color}`}
                   </p>
                 </div>
               </div>
               <div className="text-right">
-                <p className="text-sm font-semibold text-zinc-900">
+                <p className="text-sm font-semibold text-foreground">
                   {SITE_CURRENCY} {item.price.toFixed(2)}
                 </p>
               </div>
@@ -80,29 +86,31 @@ export const OrderSummary = ({
           ))}
         </div>
 
-        <Separator className="bg-zinc-200" />
+        <Separator className="bg-brand-forest/15" />
 
         {/* Price Breakdown */}
         <div className="space-y-2">
-          <div className="flex justify-between text-sm text-zinc-600">
+          <div className="flex justify-between text-sm text-foreground/60">
             <span>Subtotal</span>
             <span>{SITE_CURRENCY} {subtotal.toFixed(3)}</span>
           </div>
-          <div className="flex justify-between text-sm text-zinc-600">
+          <div className="flex justify-between text-sm text-foreground/60">
             <span>Shipping</span>
-            <span>{SITE_CURRENCY} {shipping.toFixed(4)}</span>
+            <span>
+              {shipping === 0 ? "Free" : `${SITE_CURRENCY} ${shipping.toFixed(2)}`}
+            </span>
           </div>
-          <div className="flex justify-between text-sm text-zinc-600">
+          <div className="flex justify-between text-sm text-foreground/60">
             <span>Tax (5%)</span>
             <span>{SITE_CURRENCY} {tax.toFixed(3)}</span>
           </div>
           {discount > 0 && (
-            <div className="flex justify-between text-sm text-green-600">
+            <div className="flex justify-between text-sm text-green-700">
               <span>Discount</span>
               <span>-{SITE_CURRENCY} {discount.toFixed(3)}</span>
             </div>
           )}
-          <div className="flex justify-between pt-2 text-lg font-bold text-zinc-900">
+          <div className="flex justify-between pt-2 text-lg font-bold text-foreground">
             <span>Total</span>
             <span>{SITE_CURRENCY} {total.toFixed(3)}</span>
           </div>
@@ -110,10 +118,13 @@ export const OrderSummary = ({
 
         {/* Promo Code Section */}
         <div className="space-y-3">
-          <h3 className="font-semibold text-zinc-900">Promo Code</h3>
+          <h3 className="font-serif font-semibold text-foreground">Promo Code</h3>
           {!canUsePromo ? (
-            <p className="text-sm text-zinc-600">
-              <Link href="/auth/login?next=/checkout" className="font-medium text-zinc-900 underline-offset-4 hover:underline cursor-pointer">
+            <p className="text-sm text-foreground/60">
+              <Link
+                href="/auth/login?next=/checkout"
+                className="cursor-pointer font-medium text-foreground underline-offset-4 hover:underline"
+              >
                 Sign in
               </Link>{" "}
               to use promo codes.
@@ -130,7 +141,7 @@ export const OrderSummary = ({
                 onClick={removePromoCode}
                 variant="ghost"
                 size="sm"
-                className="h-auto p-1 text-green-600 hover:bg-green-100 hover:text-green-700"
+                className="h-auto cursor-pointer p-1 text-green-600 hover:bg-green-100 hover:text-green-700"
               >
                 <X className="h-4 w-4" />
               </Button>
@@ -141,13 +152,13 @@ export const OrderSummary = ({
                 placeholder="Enter promo code"
                 value={promoCode}
                 onChange={(e) => setPromoCode(e.target.value)}
-                className="border-zinc-200 bg-white text-zinc-900 placeholder:text-zinc-400"
+                className={storefrontInput}
                 disabled={isApplyingPromoCode}
               />
               <Button
                 onClick={applyPromoCode}
                 variant="outline"
-                className="cursor-pointer border-zinc-900 text-zinc-900 hover:bg-zinc-900 hover:text-white"
+                className={storefrontOutlineBtn}
                 disabled={isApplyingPromoCode || !promoCode.trim()}
               >
                 {isApplyingPromoCode ? (
@@ -161,12 +172,12 @@ export const OrderSummary = ({
         </div>
 
         {/* Order Total Summary */}
-        <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4">
-          <div className="flex justify-between text-lg font-bold text-zinc-900">
+        <div className="rounded-lg border border-brand-forest/15 bg-brand-champagne/30 p-4">
+          <div className="flex justify-between text-lg font-bold text-foreground">
             <span>Total Amount:</span>
             <span>{SITE_CURRENCY} {total.toFixed(3)}</span>
           </div>
-          <p className="mt-2 text-xs text-zinc-600">
+          <p className="mt-2 text-xs text-foreground/60">
             Complete all steps to place your order
           </p>
         </div>

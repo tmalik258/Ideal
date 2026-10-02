@@ -69,9 +69,9 @@ export default function OrderContent() {
 
   if (!orderId) {
     return (
-      <div className="flex min-h-[50vh] flex-col items-center justify-center gap-4 px-4 text-center">
-        <p className="text-zinc-600">No order was provided.</p>
-        <Button asChild className="cursor-pointer">
+      <div className="flex min-h-[50vh] flex-col items-center justify-center gap-4 bg-brand-ivory px-4 text-center">
+        <p className="text-foreground/60">No order was provided.</p>
+        <Button asChild className="cursor-pointer bg-brand-forest text-brand-champagne hover:bg-brand-forest/90">
           <Link href="/">Continue shopping</Link>
         </Button>
       </div>
@@ -80,7 +80,7 @@ export default function OrderContent() {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-[50vh] items-center justify-center text-zinc-500">
+      <div className="flex min-h-[50vh] items-center justify-center bg-brand-ivory text-foreground/50">
         Loading your order…
       </div>
     );
@@ -88,11 +88,11 @@ export default function OrderContent() {
 
   if (error || !order) {
     return (
-      <div className="flex min-h-[50vh] flex-col items-center justify-center gap-4 px-4 text-center">
-        <p className="text-zinc-600">
+      <div className="flex min-h-[50vh] flex-col items-center justify-center gap-4 bg-brand-ivory px-4 text-center">
+        <p className="text-foreground/60">
           {error instanceof Error ? error.message : 'Order not found'}
         </p>
-        <Button asChild className="cursor-pointer">
+        <Button asChild className="cursor-pointer bg-brand-forest text-brand-champagne hover:bg-brand-forest/90">
           <Link href="/">Continue shopping</Link>
         </Button>
       </div>
@@ -110,11 +110,13 @@ export default function OrderContent() {
 
   return (
     <div>
-      <div className="bg-zinc-900 px-4 py-10 text-center text-white sm:px-6">
-        <p className="text-sm uppercase tracking-widest text-zinc-400">Order confirmed</p>
-        <h1 className="mt-2 font-serif text-3xl sm:text-4xl">Thank you</h1>
-        <p className="mt-3 text-zinc-300">
-          Order <span className="font-medium text-white">{order.orderNumber}</span>
+      <div className="bg-brand-forest px-4 py-12 text-center text-brand-champagne sm:px-6">
+        <p className="font-serif text-[0.65rem] font-semibold tracking-[0.28em] text-brand-champagne/70 uppercase">
+          Order confirmed
+        </p>
+        <h1 className="mt-3 font-serif text-3xl tracking-tight sm:text-4xl">Thank you</h1>
+        <p className="mt-3 text-brand-champagne/80">
+          Order <span className="font-medium text-brand-champagne">{order.orderNumber}</span>
           {' · '}
           {SITE_CURRENCY} {order.totalAmount.toFixed(2)}
         </p>

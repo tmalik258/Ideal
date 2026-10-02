@@ -161,11 +161,54 @@ export function useDeleteProduct() {
         queryKey: ['product-variations'],
         refetchType: 'active'
       });
-      
-      toast.success('Product deleted successfully');
     },
     onError: (error: Error) => {
       toast.error(error.message || 'Failed to delete product');
+    },
+  });
+}
+
+// Delete multiple products
+export function useDeleteProducts() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (ids: string[]): Promise<{ deletedCount: number }> => {
+      const results = await Promise.all(
+        ids.map(async (id) => {
+          const response = await fetch(`/api/products/${id}`, {
+            method: 'DELETE',
+          });
+          if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.message || error.error || `Failed to delete product ${id}`);
+          }
+          return id;
+        })
+      );
+
+      return { deletedCount: results.length };
+    },
+    onSuccess: (_, deletedIds) => {
+      for (const deletedId of deletedIds) {
+        queryClient.removeQueries({ queryKey: ['product', deletedId] });
+      }
+
+      queryClient.invalidateQueries({
+        queryKey: ['products'],
+        refetchType: 'active',
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['product-stats'],
+        refetchType: 'active',
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['product-variations'],
+        refetchType: 'active',
+      });
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || 'Failed to delete products');
     },
   });
 }

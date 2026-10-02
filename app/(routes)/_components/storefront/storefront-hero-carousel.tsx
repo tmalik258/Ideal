@@ -9,15 +9,11 @@ import type { HeroSlide } from "@prisma/client";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import gsap from "gsap";
 import { cn } from "@/lib/utils";
+import { prefersReducedMotion } from "@/lib/utils/prefers-reduced-motion";
 
 type Props = {
   slides: HeroSlide[];
 };
-
-function prefersReducedMotion(): boolean {
-  if (typeof window === "undefined") return false;
-  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-}
 
 export function StorefrontHeroCarousel({ slides }: Props) {
   const autoplay = useRef(
@@ -81,7 +77,7 @@ export function StorefrontHeroCarousel({ slides }: Props) {
   }
 
   return (
-    <section className="relative overflow-hidden bg-zinc-50">
+    <section className="relative overflow-hidden bg-brand-ivory">
       <div className="overflow-hidden" ref={emblaRef}>
         <div className="flex">
           {slides.map((slide, index) => (

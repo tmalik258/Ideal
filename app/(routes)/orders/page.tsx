@@ -10,6 +10,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
+import {
+  storefrontCard,
+  storefrontEyebrow,
+  storefrontOutlineBtn,
+  storefrontPage,
+  storefrontTitle,
+} from '@/lib/storefront/surface';
 import type { OrderFilters } from '@/lib/types/order';
 import { 
   PackageIcon, 
@@ -75,11 +82,11 @@ export default function OrdersPage() {
 
   if (isError) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className={cn(storefrontPage, "container mx-auto px-4 py-8")}>
         <BreadcrumbNavigation items={breadcrumbItems} />
         
         <div className="mt-8">
-          <Card className="w-full">
+          <Card className={cn(storefrontCard, "w-full")}>
             <CardContent className="flex flex-col items-center justify-center py-16 text-center">
               <div className="w-16 h-16 bg-destructive/10 rounded-full flex items-center justify-center mb-4">
                 <PackageIcon className="w-8 h-8 text-destructive" />
@@ -103,7 +110,7 @@ export default function OrdersPage() {
   }
 
   return (
-    <div className="container mx-auto min-h-screen bg-zinc-50 px-4 py-8 md:pt-[var(--site-chrome-height,4rem)]">
+    <div className={cn(storefrontPage, "container mx-auto px-4 py-8")}>
       {/* Breadcrumb Navigation */}
       <BreadcrumbNavigation items={breadcrumbItems} />
 
@@ -111,8 +118,9 @@ export default function OrdersPage() {
       <div className="mt-8 mb-8">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">My Orders</h1>
-            <p className="text-muted-foreground mt-2">
+            <p className={storefrontEyebrow}>Account</p>
+            <h1 className={storefrontTitle}>My Orders</h1>
+            <p className="mt-2 text-foreground/55">
               Track and manage your order history
             </p>
           </div>
@@ -132,8 +140,9 @@ export default function OrdersPage() {
               size="sm"
               onClick={toggleFilters}
               className={cn(
-                'flex items-center gap-2',
-                hasActiveFilters && 'border-primary text-primary'
+                storefrontOutlineBtn,
+                'flex cursor-pointer items-center gap-2',
+                hasActiveFilters && 'border-brand-forest text-brand-forest'
               )}
             >
               <FilterIcon className="w-4 h-4" />
@@ -151,6 +160,7 @@ export default function OrdersPage() {
               size="sm"
               onClick={handleRefresh}
               disabled={isLoading}
+              className={cn(storefrontOutlineBtn, "cursor-pointer")}
             >
               <RefreshCwIcon className={cn(
                 'w-4 h-4',
@@ -163,7 +173,7 @@ export default function OrdersPage() {
 
       {/* Filters Section */}
       {showFilters && (
-        <Card className="mb-8">
+        <Card className={cn(storefrontCard, "mb-8")}>
           <CardHeader>
             <CardTitle className="text-lg">Filter Orders</CardTitle>
           </CardHeader>

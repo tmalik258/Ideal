@@ -16,8 +16,8 @@ export function filterChipClass(active: boolean, size: "sm" | "md" = "md") {
     chipShape,
     size === "sm" ? "px-3 py-1.5 text-xs font-medium" : "px-3.5 py-2 text-sm font-medium",
     active
-      ? "border-zinc-900 bg-zinc-900 text-white"
-      : "border-zinc-200 bg-white text-zinc-800 hover:border-zinc-400"
+      ? "border-brand-forest bg-brand-forest text-brand-champagne"
+      : "border-brand-forest/15 bg-brand-ivory text-foreground hover:border-brand-forest/40"
   );
 }
 
@@ -26,8 +26,8 @@ export function filterRowClass(active: boolean) {
     chipShape,
     "flex w-full items-center justify-between gap-3 px-3.5 py-2.5 text-left text-sm font-medium",
     active
-      ? "border-zinc-900 bg-zinc-900 text-white"
-      : "border-zinc-200 bg-white text-zinc-800 hover:border-zinc-400"
+      ? "border-brand-forest bg-brand-forest text-brand-champagne"
+      : "border-brand-forest/15 bg-brand-ivory text-foreground hover:border-brand-forest/40"
   );
 }
 

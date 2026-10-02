@@ -2,6 +2,7 @@
 
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useGsapToolbarReveal } from "@/lib/hooks/useGsapProductsReveal";
 import type { ProductsFilterChange, ProductsFiltersState } from "./products-filter-types";
 
 type Chip = {
@@ -67,17 +68,20 @@ export function ProductsActiveChips({
     chips.push({ key: "featured", label: "Featured", clear: { featured: undefined } });
   }
 
+  const chipsKey = chips.map((chip) => chip.key).join(",");
+  const chipsRef = useGsapToolbarReveal(chipsKey);
+
   if (!chips.length) return null;
 
   return (
-    <div className="flex flex-wrap items-center gap-2">
+    <div ref={chipsRef} className="flex flex-wrap items-center gap-2">
       {chips.map((chip) => (
         <button
           key={chip.key}
           type="button"
           onClick={() => onFilterChange(chip.clear)}
           className={cn(
-            "inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-zinc-200 bg-white px-3 py-1.5 text-xs font-medium text-zinc-800 transition hover:border-zinc-400"
+            "inline-flex cursor-pointer items-center gap-1.5 border border-brand-forest/15 bg-brand-ivory px-3 py-1.5 font-serif text-[0.7rem] font-medium tracking-[0.12em] text-brand-forest uppercase transition hover:border-brand-forest/40"
           )}
         >
           {chip.label}
@@ -87,7 +91,7 @@ export function ProductsActiveChips({
       <button
         type="button"
         onClick={onClearAll}
-        className="cursor-pointer text-xs font-medium text-zinc-500 underline-offset-4 hover:text-zinc-900 hover:underline"
+        className="cursor-pointer font-serif text-[0.7rem] font-medium tracking-[0.12em] text-brand-forest/50 uppercase underline-offset-4 transition hover:text-brand-forest hover:underline"
       >
         Clear all
       </button>

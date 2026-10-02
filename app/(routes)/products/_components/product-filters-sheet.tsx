@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { useFilters, usePriceStatistics } from "@/lib/hooks/useFilters";
+import { storefrontPrimaryBtn } from "@/lib/storefront/surface";
 import {
   buildPriceRanges,
   filterChipClass,
@@ -57,20 +58,25 @@ export function ProductFiltersSheet({
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
         side="right"
-        className="z-[4001] flex h-full w-full max-w-full flex-col gap-0 border-zinc-200 bg-white p-0 sm:max-w-md"
+        className="z-[4001] flex h-full w-full max-w-full flex-col gap-0 border-l border-brand-forest/10 bg-brand-ivory p-0 sm:max-w-md"
       >
-        <SheetHeader className="shrink-0 space-y-0 border-b border-zinc-100 px-5 py-4 text-left">
+        <SheetHeader className="shrink-0 space-y-0 border-b border-brand-forest/10 px-5 py-5 text-left">
           <div className="flex items-center justify-between gap-3 pr-8">
-            <SheetTitle className="text-lg font-semibold tracking-tight text-zinc-900">
-              Filters
-            </SheetTitle>
+            <div>
+              <p className="mb-1 font-serif text-[0.65rem] font-semibold tracking-[0.28em] text-brand-forest/55 uppercase">
+                Refine
+              </p>
+              <SheetTitle className="font-serif text-xl tracking-tight text-foreground">
+                Filters
+              </SheetTitle>
+            </div>
             {hasActive ? (
               <Button
                 type="button"
                 variant="ghost"
                 size="sm"
                 onClick={onClearAll}
-                className="h-8 cursor-pointer px-2 text-zinc-600 hover:text-zinc-900"
+                className="h-8 cursor-pointer px-2 font-serif text-[0.7rem] tracking-[0.12em] text-brand-forest/60 uppercase hover:bg-brand-champagne/40 hover:text-brand-forest"
               >
                 Clear
               </Button>
@@ -81,9 +87,9 @@ export function ProductFiltersSheet({
           </SheetDescription>
         </SheetHeader>
 
-        <div className="min-h-0 flex-1 space-y-7 overflow-y-auto px-5 py-5">
+        <div className="min-h-0 flex-1 space-y-8 overflow-y-auto px-5 py-6">
           <section className="space-y-3">
-            <h3 className="text-xs font-semibold tracking-[0.16em] text-zinc-500 uppercase">
+            <h3 className="font-serif text-[0.65rem] font-semibold tracking-[0.22em] text-brand-forest/50 uppercase">
               Shop for
             </h3>
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
@@ -101,13 +107,16 @@ export function ProductFiltersSheet({
           </section>
 
           <section className="space-y-3">
-            <h3 className="text-xs font-semibold tracking-[0.16em] text-zinc-500 uppercase">
+            <h3 className="font-serif text-[0.65rem] font-semibold tracking-[0.22em] text-brand-forest/50 uppercase">
               Category
             </h3>
             {isLoading ? (
               <div className="space-y-2">
                 {[1, 2, 3, 4].map((i) => (
-                  <div key={i} className="h-11 animate-pulse rounded-tr-2xl rounded-bl-2xl bg-zinc-100" />
+                  <div
+                    key={i}
+                    className="h-11 animate-pulse rounded-tr-2xl rounded-bl-2xl bg-brand-forest/10"
+                  />
                 ))}
               </div>
             ) : (
@@ -134,7 +143,12 @@ export function ProductFiltersSheet({
                     >
                       <span className="min-w-0 truncate">{option.name}</span>
                       {option.count != null && option.count > 0 ? (
-                        <span className={cn("shrink-0 text-xs tabular-nums", selected ? "text-white/70" : "text-zinc-400")}>
+                        <span
+                          className={cn(
+                            "shrink-0 text-xs tabular-nums",
+                            selected ? "text-brand-champagne/70" : "text-foreground/40"
+                          )}
+                        >
                           {option.count}
                         </span>
                       ) : null}
@@ -147,11 +161,11 @@ export function ProductFiltersSheet({
 
           <section className="space-y-3">
             <div className="flex flex-wrap items-baseline justify-between gap-2">
-              <h3 className="text-xs font-semibold tracking-[0.16em] text-zinc-500 uppercase">
+              <h3 className="font-serif text-[0.65rem] font-semibold tracking-[0.22em] text-brand-forest/50 uppercase">
                 Price
               </h3>
               {!priceStatsLoading && priceStats ? (
-                <span className="text-xs text-zinc-400">
+                <span className="text-xs text-foreground/40">
                   {priceStats.min} – {priceStats.max}+
                 </span>
               ) : null}
@@ -178,10 +192,10 @@ export function ProductFiltersSheet({
           </section>
         </div>
 
-        <div className="shrink-0 border-t border-zinc-100 px-5 py-4">
+        <div className="shrink-0 border-t border-brand-forest/10 px-5 py-4">
           <Button
             type="button"
-            className="h-11 w-full cursor-pointer bg-zinc-900 text-white hover:bg-zinc-800"
+            className={cn(storefrontPrimaryBtn, "h-11 w-full rounded-none rounded-tr-2xl rounded-bl-2xl")}
             onClick={() => onOpenChange(false)}
           >
             Show results

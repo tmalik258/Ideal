@@ -2,11 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-
-function prefersReducedMotion(): boolean {
-  if (typeof window === "undefined") return false;
-  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-}
+import { prefersReducedMotion } from "@/lib/utils/prefers-reduced-motion";
 
 /** Stagger-fade product cards when the product list changes. */
 export function useGsapProductsReveal(depsKey: string) {
@@ -27,13 +23,13 @@ export function useGsapProductsReveal(depsKey: string) {
     const ctx = gsap.context(() => {
       gsap.fromTo(
         cards,
-        { opacity: 0, y: 16 },
+        { opacity: 0, y: 32 },
         {
           opacity: 1,
           y: 0,
-          duration: 0.45,
-          stagger: 0.06,
-          ease: "power2.out",
+          duration: 0.6,
+          stagger: 0.08,
+          ease: "power3.out",
           clearProps: "transform",
         }
       );
@@ -46,7 +42,7 @@ export function useGsapProductsReveal(depsKey: string) {
 }
 
 /** One-shot fade-in for toolbar / chips strip. */
-export function useGsapToolbarReveal() {
+export function useGsapToolbarReveal(depsKey = "") {
   const toolbarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -61,13 +57,13 @@ export function useGsapToolbarReveal() {
     const ctx = gsap.context(() => {
       gsap.fromTo(
         el,
-        { opacity: 0, y: 8 },
-        { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }
+        { opacity: 0, y: 14 },
+        { opacity: 1, y: 0, duration: 0.55, ease: "power3.out" }
       );
     }, el);
 
     return () => ctx.revert();
-  }, []);
+  }, [depsKey]);
 
   return toolbarRef;
 }

@@ -132,14 +132,12 @@ function ProductsContent() {
 
   const handleFilterChange = useCallback(
     (partial: Partial<ProductsFiltersState>) => {
-      setFilters((prev) => {
-        const next = { ...prev, ...partial };
-        setCurrentPage(1);
-        syncUrl(next, 1);
-        return next;
-      });
+      const next = { ...filters, ...partial };
+      setFilters(next);
+      setCurrentPage(1);
+      syncUrl(next, 1);
     },
-    [syncUrl]
+    [filters, syncUrl]
   );
 
   const handleClearAll = useCallback(() => {
@@ -170,9 +168,9 @@ function ProductsContent() {
   const title = productsPageHeading(filters, categoryName);
 
   return (
-    <div className="min-h-screen bg-zinc-50 pt-[var(--site-chrome-height,4rem)]">
-      <div className="mx-auto max-w-7xl px-4 py-8 lg:px-6 lg:py-10">
-        <div id="products-section" className="space-y-6">
+    <div className="min-h-screen bg-brand-ivory pt-[var(--site-chrome-height,4rem)]">
+      <div className="mx-auto max-w-7xl px-4 py-10 lg:px-6 lg:py-14">
+        <div id="products-section" className="space-y-8 md:space-y-10">
           <ProductsToolbar
             title={title}
             productsCount={totalProducts}
@@ -203,18 +201,18 @@ function ProductsContent() {
                 variant="outline"
                 onClick={() => goToPage(Math.max(1, currentPage - 1))}
                 disabled={currentPage === 1}
-                className="cursor-pointer border-zinc-200 bg-white text-zinc-900 hover:bg-zinc-100 disabled:cursor-not-allowed"
+                className="cursor-pointer border-brand-forest/15 bg-brand-ivory text-brand-forest hover:bg-brand-champagne/40 disabled:cursor-not-allowed"
               >
                 Previous
               </Button>
-              <span className="text-sm text-zinc-600">
+              <span className="text-sm text-foreground/55">
                 {currentPage} / {totalPages}
               </span>
               <Button
                 variant="outline"
                 onClick={() => goToPage(Math.min(totalPages, currentPage + 1))}
                 disabled={currentPage >= totalPages}
-                className="cursor-pointer border-zinc-200 bg-white text-zinc-900 hover:bg-zinc-100 disabled:cursor-not-allowed"
+                className="cursor-pointer border-brand-forest/15 bg-brand-ivory text-brand-forest hover:bg-brand-champagne/40 disabled:cursor-not-allowed"
               >
                 Next
               </Button>

@@ -7,10 +7,10 @@ export function AboutTeamSection() {
     <section className="py-16 md:py-20">
       <div className="mx-auto max-w-7xl px-4">
         <header className="mb-12 text-center">
-          <h2 className="text-3xl font-semibold tracking-tight text-zinc-900 md:text-4xl">
+          <h2 className="font-serif text-3xl font-semibold tracking-tight text-foreground md:text-4xl">
             The People Behind {SITE_NAME}
           </h2>
-          <p className="mx-auto mt-3 max-w-2xl text-zinc-600">
+          <p className="mx-auto mt-3 max-w-2xl text-foreground/60">
             A small team focused on quality products and dependable service.
           </p>
         </header>
@@ -18,7 +18,7 @@ export function AboutTeamSection() {
         <div className="grid grid-cols-2 gap-8 lg:grid-cols-4 lg:gap-12">
           {teamMembers.map((member) => (
             <div key={member.name} className="text-center">
-              <div className="relative mx-auto mb-5 h-32 w-32 overflow-hidden rounded-full bg-white shadow-sm ring-2 ring-zinc-200 lg:h-36 lg:w-36">
+              <div className="relative mx-auto mb-5 h-32 w-32 overflow-hidden rounded-full bg-brand-ivory ring-2 ring-brand-forest/15 lg:h-36 lg:w-36">
                 <Image
                   src={member.image}
                   alt={member.name}
@@ -27,8 +27,10 @@ export function AboutTeamSection() {
                   className="h-full w-full object-cover"
                 />
               </div>
-              <h3 className="text-lg font-semibold text-zinc-900">{member.name}</h3>
-              <p className="mt-1 text-sm text-zinc-600 md:text-base">{member.role}</p>
+              <h3 className="font-serif text-lg font-semibold text-foreground">
+                {member.name}
+              </h3>
+              <p className="mt-1 text-sm text-foreground/60 md:text-base">{member.role}</p>
             </div>
           ))}
         </div>

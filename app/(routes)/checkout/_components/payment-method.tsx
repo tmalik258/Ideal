@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Banknote } from "lucide-react";
 import { toast } from "sonner";
+import { storefrontCard, storefrontPrimaryBtn } from "@/lib/storefront/surface";
+import { cn } from "@/lib/utils";
 
 interface PaymentMethodProps {
   paymentData: {
@@ -73,10 +75,10 @@ const PaymentMethod: React.FC<PaymentMethodProps> = ({
   };
 
   return (
-    <Card className="border-zinc-200 bg-white shadow-sm">
+    <Card className={storefrontCard}>
       <CardHeader>
-        <CardTitle className="flex items-center text-zinc-900">
-          <div className="mr-3 flex h-8 w-8 items-center justify-center rounded-full bg-zinc-900 text-sm font-semibold text-white">
+        <CardTitle className="flex items-center font-serif text-foreground">
+          <div className="mr-3 flex h-8 w-8 items-center justify-center rounded-full bg-brand-forest text-sm font-semibold text-brand-champagne">
             2
           </div>
           Payment Method
@@ -85,7 +87,7 @@ const PaymentMethod: React.FC<PaymentMethodProps> = ({
       <CardContent className="space-y-6">
         <div>
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-zinc-900">
+            <h3 className="font-serif text-lg font-semibold text-foreground">
               Payment Options
             </h3>
 
@@ -96,19 +98,18 @@ const PaymentMethod: React.FC<PaymentMethodProps> = ({
             )}
 
             <div
-              className={`flex cursor-pointer items-center justify-between rounded-lg border p-4 ring-2 ring-zinc-900 transition-all ${
-                validationErrors.paymentMethod
-                  ? "border-red-500"
-                  : "border-zinc-200"
-              }`}
+              className={cn(
+                "flex cursor-pointer items-center justify-between rounded-lg border border-brand-forest/15 p-4 ring-2 ring-brand-forest transition-all",
+                validationErrors.paymentMethod && "border-red-500"
+              )}
             >
               <div className="flex items-center space-x-3">
-                <div className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-zinc-900">
-                  <div className="h-3 w-3 rounded-full bg-zinc-900" />
+                <div className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-brand-forest">
+                  <div className="h-3 w-3 rounded-full bg-brand-forest" />
                 </div>
                 <div className="flex items-center space-x-2">
-                  <Banknote className="h-5 w-5 text-zinc-700" />
-                  <span className="text-base font-medium text-zinc-900">
+                  <Banknote className="h-5 w-5 text-foreground/70" />
+                  <span className="text-base font-medium text-foreground">
                     Cash on Delivery
                   </span>
                 </div>
@@ -127,9 +128,12 @@ const PaymentMethod: React.FC<PaymentMethodProps> = ({
               type="button"
               disabled={processing || !isFormValid}
               onClick={handleSubmit}
-              className="flex cursor-pointer items-center justify-center rounded-none rounded-tr-2xl rounded-bl-2xl bg-zinc-900 px-12 py-3 transition-all hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-50"
+              className={cn(
+                storefrontPrimaryBtn,
+                "flex items-center justify-center rounded-none rounded-tr-2xl rounded-bl-2xl px-12 py-3 transition-all disabled:cursor-not-allowed disabled:opacity-50"
+              )}
             >
-              <span className="text-base font-bold text-white">
+              <span className="text-base font-bold">
                 {processing ? "Processing..." : "Place Order"}
               </span>
             </button>

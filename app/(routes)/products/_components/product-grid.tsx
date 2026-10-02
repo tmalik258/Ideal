@@ -33,9 +33,9 @@ export function ProductGrid({
 
   if (products.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-zinc-200 bg-white py-16 text-center">
-        <h3 className="text-lg font-semibold text-zinc-900">No products found</h3>
-        <p className="mt-2 max-w-sm text-sm text-zinc-600">
+      <div className="flex flex-col items-center justify-center border border-dashed border-brand-forest/20 bg-brand-champagne/20 py-16 text-center">
+        <h3 className="font-serif text-lg font-semibold text-brand-forest">No products found</h3>
+        <p className="mt-2 max-w-sm text-sm text-foreground/60">
           Try adjusting your filters or clearing them to see more styles.
         </p>
       </div>
@@ -45,7 +45,7 @@ export function ProductGrid({
   return (
     <div
       ref={gridRef}
-      className={`grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 lg:gap-6 ${className}`}
+      className={`grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 lg:gap-x-8 lg:gap-y-12 ${className}`}
     >
       {products.map((product) => (
         <div key={product.id} data-product-card>

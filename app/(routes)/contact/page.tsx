@@ -2,7 +2,17 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import {
+  storefrontCard,
+  storefrontInput,
+  storefrontOutlineBtn,
+  storefrontPage,
+  storefrontPrimaryBtn,
+  storefrontTitle,
+} from "@/lib/storefront/surface";
+import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -289,12 +299,12 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-50 pt-[var(--site-chrome-height,4rem)]">
+    <div className={storefrontPage}>
       <div className="container mx-auto px-4 py-8">
       {/* Header */}
       <div className="mb-12 text-center">
-        <h1 className="mb-4 font-serif text-4xl font-bold text-zinc-900">Contact Us</h1>
-        <p className="mx-auto max-w-2xl text-xl text-zinc-600">
+        <h1 className={cn(storefrontTitle, "mb-4")}>Contact Us</h1>
+        <p className="mx-auto max-w-2xl text-xl text-foreground/55">
           We&apos;re here to help! Get in touch with our customer support team for any questions or concerns.
         </p>
       </div>
@@ -302,10 +312,10 @@ export default function ContactPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
         {/* Contact Information */}
         <div className="lg:col-span-1">
-          <Card>
+          <Card className={storefrontCard}>
             <CardHeader>
-              <CardTitle className="flex items-center">
-                <MessageCircle className="mr-2 h-5 w-5" />
+              <CardTitle className="flex items-center text-foreground">
+                <MessageCircle className="mr-2 h-5 w-5 text-brand-forest" />
                 Get in Touch
               </CardTitle>
             </CardHeader>
@@ -315,7 +325,7 @@ export default function ContactPage() {
                 <MapPin className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
                 <div>
                   <h4 className="font-semibold mb-1">Visit Our Store</h4>
-                  <p className="text-gray-600 text-sm">
+                  <p className="text-sm text-foreground/55">
                     {contactInfo.address.street}<br />
                     {contactInfo.address.city}, {contactInfo.address.state} {contactInfo.address.zip}<br />
                     {contactInfo.address.country}
@@ -328,7 +338,7 @@ export default function ContactPage() {
                 <Phone className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
                 <div>
                   <h4 className="font-semibold mb-1">Call Us</h4>
-                  <p className="text-gray-600 text-sm">{contactInfo.phone}</p>
+                  <p className="text-sm text-foreground/55">{contactInfo.phone}</p>
                 </div>
               </div>
 
@@ -337,7 +347,7 @@ export default function ContactPage() {
                 <Mail className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
                 <div>
                   <h4 className="font-semibold mb-1">Email Us</h4>
-                  <p className="text-gray-600 text-sm">{contactInfo.email}</p>
+                  <p className="text-sm text-foreground/55">{contactInfo.email}</p>
                 </div>
               </div>
 
@@ -346,7 +356,7 @@ export default function ContactPage() {
                 <Clock className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
                 <div>
                   <h4 className="font-semibold mb-1">Business Hours</h4>
-                  <p className="text-gray-600 text-sm">
+                  <p className="text-sm text-foreground/55">
                     {contactInfo.hours.weekdays}<br />
                     {contactInfo.hours.weekends}
                   </p>
@@ -354,12 +364,12 @@ export default function ContactPage() {
               </div>
 
               {/* Response Time */}
-              <div className="bg-blue-50 p-4 rounded-lg">
-                <div className="flex items-center mb-2">
-                  <AlertCircle className="h-4 w-4 text-blue-600 mr-2" />
-                  <span className="font-semibold text-blue-900">Response Time</span>
+              <div className="rounded-none border border-brand-forest/15 bg-brand-champagne/20 p-4">
+                <div className="mb-2 flex items-center">
+                  <AlertCircle className="mr-2 h-4 w-4 text-brand-forest" />
+                  <span className="font-semibold text-brand-forest">Response Time</span>
                 </div>
-                <p className="text-blue-800 text-sm">
+                <p className="text-sm text-foreground/55">
                   We typically respond to all inquiries within 24 hours during business days.
                 </p>
               </div>
@@ -369,16 +379,16 @@ export default function ContactPage() {
 
         {/* Contact Form */}
         <div className="lg:col-span-2">
-          <Card>
+          <Card className={storefrontCard}>
             <CardHeader>
-              <CardTitle>Send us a Message</CardTitle>
+              <CardTitle className="text-foreground">Send us a Message</CardTitle>
             </CardHeader>
             <CardContent>
               {isSubmitted ? (
                 <div className="text-center py-8">
                   <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
                   <h3 className="text-xl font-semibold mb-2">Message Sent Successfully!</h3>
-                  <p className="text-gray-600">
+                  <p className="text-foreground/55">
                     Thank you for contacting us. We&apos;ll get back to you within 24 hours.
                   </p>
                 </div>
@@ -395,7 +405,10 @@ export default function ContactPage() {
                         onChange={handleInputChange}
                         required
                         placeholder="Enter your full name"
-                        className={formErrors.name ? 'border-red-500 focus:ring-red-500' : ''}
+                        className={cn(
+                          storefrontInput,
+                          formErrors.name && "border-red-500 focus-visible:ring-red-500/20"
+                        )}
                       />
                       {formErrors.name && (
                         <p className="text-red-500 text-sm mt-1">{formErrors.name}</p>
@@ -411,7 +424,10 @@ export default function ContactPage() {
                         onChange={handleInputChange}
                         required
                         placeholder="Enter your email address"
-                        className={formErrors.email ? 'border-red-500 focus:ring-red-500' : ''}
+                        className={cn(
+                          storefrontInput,
+                          formErrors.email && "border-red-500 focus-visible:ring-red-500/20"
+                        )}
                       />
                       {formErrors.email && (
                         <p className="text-red-500 text-sm mt-1">{formErrors.email}</p>
@@ -430,7 +446,10 @@ export default function ContactPage() {
                         value={formData.phone}
                         onChange={handleInputChange}
                         placeholder="Enter your phone number"
-                        className={formErrors.phone ? 'border-red-500 focus:ring-red-500' : ''}
+                        className={cn(
+                          storefrontInput,
+                          formErrors.phone && "border-red-500 focus-visible:ring-red-500/20"
+                        )}
                       />
                       {formErrors.phone && (
                         <p className="text-red-500 text-sm mt-1">{formErrors.phone}</p>
@@ -439,9 +458,13 @@ export default function ContactPage() {
                     <div>
                       <Label htmlFor="category">Category *</Label>
                       <Select value={formData.category} onValueChange={(value) => handleSelectChange('category', value)}>
-                        <SelectTrigger className={`w-full ${
-                          formErrors.category ? 'border-red-500 focus:ring-red-500' : 'focus:border-zinc-900'
-                        }`}>
+                        <SelectTrigger
+                          className={cn(
+                            "w-full cursor-pointer",
+                            storefrontInput,
+                            formErrors.category && "border-red-500 focus-visible:ring-red-500/20"
+                          )}
+                        >
                           <SelectValue placeholder="Select a category" />
                         </SelectTrigger>
                         <SelectContent className="max-h-60">
@@ -470,6 +493,7 @@ export default function ContactPage() {
                         value={formData.orderNumber}
                         onChange={handleInputChange}
                         placeholder="Enter your order number (optional)"
+                        className={storefrontInput}
                       />
                     </div>
                   )}
@@ -484,7 +508,10 @@ export default function ContactPage() {
                       onChange={handleInputChange}
                       required
                       placeholder="Brief description of your inquiry"
-                      className={formErrors.subject ? 'border-red-500 focus:ring-red-500' : ''}
+                      className={cn(
+                        storefrontInput,
+                        formErrors.subject && "border-red-500 focus-visible:ring-red-500/20"
+                      )}
                     />
                     {formErrors.subject && (
                       <p className="text-red-500 text-sm mt-1">{formErrors.subject}</p>
@@ -502,7 +529,10 @@ export default function ContactPage() {
                       required
                       rows={6}
                       placeholder="Please provide details about your inquiry..."
-                      className={formErrors.message ? 'border-red-500 focus:ring-red-500' : ''}
+                      className={cn(
+                        storefrontInput,
+                        formErrors.message && "border-red-500 focus-visible:ring-red-500/20"
+                      )}
                     />
                     {formErrors.message && (
                       <p className="text-red-500 text-sm mt-1">{formErrors.message}</p>
@@ -510,9 +540,9 @@ export default function ContactPage() {
                   </div>
 
                   {/* Submit Button */}
-                  <Button 
-                    type="submit" 
-                    className="w-full cursor-pointer"
+                  <Button
+                    type="submit"
+                    className={cn(storefrontPrimaryBtn, "w-full cursor-pointer")}
                     disabled={isSubmitting}
                   >
                     {isSubmitting ? (
@@ -538,7 +568,7 @@ export default function ContactPage() {
       <div className="mb-12">
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold font-serif mb-4">Frequently Asked Questions</h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
+          <p className="mx-auto max-w-2xl text-foreground/55">
             Find quick answers to common questions. Can&apos;t find what you&apos;re looking for? Contact us directly.
           </p>
         </div>
@@ -547,10 +577,10 @@ export default function ContactPage() {
           {faqData.map((category) => {
             const IconComponent = category.icon;
             return (
-              <Card key={category.category}>
+              <Card key={category.category} className={storefrontCard}>
                 <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <IconComponent className="mr-2 h-5 w-5" />
+                  <CardTitle className="flex items-center text-foreground">
+                    <IconComponent className="mr-2 h-5 w-5 text-brand-forest" />
                     {category.category}
                   </CardTitle>
                 </CardHeader>
@@ -561,18 +591,24 @@ export default function ContactPage() {
                       const isExpanded = expandedFaq === questionId;
                       
                       return (
-                        <div key={questionId} className="border-b border-gray-200 last:border-b-0 pb-4 last:pb-0">
+                        <div
+                          key={questionId}
+                          className="border-b border-brand-forest/15 pb-4 last:border-b-0 last:pb-0"
+                        >
                           <button
                             onClick={() => toggleFaq(questionId)}
-                            className="flex items-center justify-between w-full text-left cursor-pointer"
+                            className="flex w-full cursor-pointer items-center justify-between text-left"
                           >
-                            <span className="font-medium text-sm">{faq.question}</span>
-                            <HelpCircle className={`h-4 w-4 text-gray-400 transition-transform ${
-                              isExpanded ? 'rotate-180' : ''
-                            }`} />
+                            <span className="text-sm font-medium text-foreground">{faq.question}</span>
+                            <HelpCircle
+                              className={cn(
+                                "h-4 w-4 text-brand-forest/40 transition-transform",
+                                isExpanded && "rotate-180"
+                              )}
+                            />
                           </button>
                           {isExpanded && (
-                            <div className="mt-2 text-sm text-gray-600">
+                            <div className="mt-2 text-sm text-foreground/55">
                               {faq.answer}
                             </div>
                           )}
@@ -588,47 +624,47 @@ export default function ContactPage() {
       </div>
 
       {/* Additional Support Options */}
-      <div className="bg-gray-50 rounded-lg p-8">
-        <div className="text-center mb-6">
-          <h3 className="text-2xl font-bold mb-2">Need More Help?</h3>
-          <p className="text-gray-600">Explore these additional support options</p>
+      <div className="rounded-none border border-brand-forest/15 bg-brand-champagne/20 p-8">
+        <div className="mb-6 text-center">
+          <h3 className="mb-2 font-serif text-2xl font-semibold text-foreground">Need More Help?</h3>
+          <p className="text-foreground/55">Explore these additional support options</p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card className="text-center">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+          <Card className={cn(storefrontCard, "text-center")}>
             <CardContent className="pt-6">
-              <Globe className="h-12 w-12 mx-auto mb-4 text-primary" />
-              <h4 className="font-semibold mb-2">Help Center</h4>
-              <p className="text-sm text-gray-600 mb-4">
+              <Globe className="mx-auto mb-4 h-12 w-12 text-brand-forest" />
+              <h4 className="mb-2 font-semibold text-foreground">Help Center</h4>
+              <p className="mb-4 text-sm text-foreground/55">
                 Browse our comprehensive help articles and guides
               </p>
-              <Button asChild variant="outline" size="sm" className="cursor-pointer">
+              <Button asChild variant="outline" size="sm" className={cn(storefrontOutlineBtn, "cursor-pointer")}>
                 <Link href="/faq">Visit Help Center</Link>
               </Button>
             </CardContent>
           </Card>
           
-          <Card className="text-center">
+          <Card className={cn(storefrontCard, "text-center")}>
             <CardContent className="pt-6">
-              <MessageCircle className="h-12 w-12 mx-auto mb-4 text-primary" />
-              <h4 className="font-semibold mb-2">Email Support</h4>
-              <p className="text-sm text-gray-600 mb-4">
+              <MessageCircle className="mx-auto mb-4 h-12 w-12 text-brand-forest" />
+              <h4 className="mb-2 font-semibold text-foreground">Email Support</h4>
+              <p className="mb-4 text-sm text-foreground/55">
                 Reach our support team by email during business hours
               </p>
-              <Button asChild variant="outline" size="sm" className="cursor-pointer">
+              <Button asChild variant="outline" size="sm" className={cn(storefrontOutlineBtn, "cursor-pointer")}>
                 <Link href={`mailto:${SITE_EMAIL_HELLO}`}>Email Support</Link>
               </Button>
             </CardContent>
           </Card>
           
-          <Card className="text-center">
+          <Card className={cn(storefrontCard, "text-center")}>
             <CardContent className="pt-6">
-              <Truck className="h-12 w-12 mx-auto mb-4 text-primary" />
-              <h4 className="font-semibold mb-2">Order Status</h4>
-              <p className="text-sm text-gray-600 mb-4">
+              <Truck className="mx-auto mb-4 h-12 w-12 text-brand-forest" />
+              <h4 className="mb-2 font-semibold text-foreground">Order Status</h4>
+              <p className="mb-4 text-sm text-foreground/55">
                 Track your orders and delivery status
               </p>
-              <Button asChild variant="outline" size="sm" className="cursor-pointer">
+              <Button asChild variant="outline" size="sm" className={cn(storefrontOutlineBtn, "cursor-pointer")}>
                 <Link href="/orders">Track Order</Link>
               </Button>
             </CardContent>

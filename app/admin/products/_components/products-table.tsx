@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
   Select,
@@ -86,6 +87,8 @@ export default function ProductsTable({
   const [isValidationErrorsModalOpen, setIsValidationErrorsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<ProductWithRelations | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<ProductWithRelations | null>(null);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [bulkDeleteProducts, setBulkDeleteProducts] = useState<ProductWithRelations[]>([]);
   
   // Extract data with fallbacks
   const products = productsData?.products || [];
@@ -93,6 +96,8 @@ export default function ProductsTable({
   const totalPages = productsData?.pagination?.totalPages || 0;
   const currentPage = productsData?.pagination?.page || 1;
   const categories = categoriesData?.categories || [];
+  const allVisibleSelected =
+    products.length > 0 && products.every((product) => selectedIds.includes(product.id));
 
   const updateSearchParams = (key: string, value: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -104,13 +109,38 @@ export default function ProductsTable({
     router.push(`?${params.toString()}`);
   };
 
+  const handleSelectAll = (checked: boolean) => {
+    if (checked) {
+      setSelectedIds(products.map((product) => product.id));
+      return;
+    }
+    setSelectedIds([]);
+  };
+
+  const handleSelectProduct = (productId: string, checked: boolean) => {
+    if (checked) {
+      setSelectedIds((prev) => [...prev, productId]);
+      return;
+    }
+    setSelectedIds((prev) => prev.filter((id) => id !== productId));
+  };
+
   const handleEditProduct = (product: ProductWithRelations) => {
     setEditingProduct(product);
     setIsFormModalOpen(true);
   };
 
   const handleDeleteProduct = (product: ProductWithRelations) => {
+    setBulkDeleteProducts([]);
     setSelectedProduct(product);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleBulkDelete = () => {
+    const selected = products.filter((product) => selectedIds.includes(product.id));
+    if (!selected.length) return;
+    setSelectedProduct(null);
+    setBulkDeleteProducts(selected);
     setIsDeleteModalOpen(true);
   };
 
@@ -120,10 +150,11 @@ export default function ProductsTable({
     setIsValidationErrorsModalOpen(false);
     setEditingProduct(null);
     setSelectedProduct(null);
+    setBulkDeleteProducts([]);
   };
 
   const handleDeleteSuccess = () => {
-    // Refetch products data when delete is successful
+    setSelectedIds([]);
     refetchProducts();
     handleCloseModals();
   };
@@ -204,6 +235,17 @@ export default function ProductsTable({
               <SelectItem value="price_desc">Price High-Low</SelectItem>
             </SelectContent>
           </Select>
+
+          {selectedIds.length > 0 ? (
+            <Button
+              variant="destructive"
+              onClick={handleBulkDelete}
+              className="cursor-pointer sm:ml-auto"
+            >
+              <Trash2 className="mr-2 h-4 w-4" />
+              Delete selected ({selectedIds.length})
+            </Button>
+          ) : null}
         </div>
       </div>
 
@@ -212,6 +254,13 @@ export default function ProductsTable({
         <Table>
           <TableHeader>
               <TableRow>
+                <TableHead className="w-12">
+                  <Checkbox
+                    checked={allVisibleSelected}
+                    onCheckedChange={(checked) => handleSelectAll(checked === true)}
+                    aria-label="Select all products"
+                  />
+                </TableHead>
                 <TableHead className="w-[80px]">Image</TableHead>
                 <TableHead>Product</TableHead>
                 <TableHead>Category</TableHead>
@@ -228,13 +277,13 @@ export default function ProductsTable({
               // Loading skeleton rows
               Array.from({ length: 5 }).map((_, index) => (
                 <TableRow key={index}>
+                  <TableCell><Skeleton className="h-4 w-4 rounded" /></TableCell>
                   <TableCell><Skeleton className="h-12 w-12 rounded" /></TableCell>
                   <TableCell><Skeleton className="h-4 w-32" /></TableCell>
                   <TableCell><Skeleton className="h-4 w-20" /></TableCell>
                   <TableCell><Skeleton className="h-4 w-16" /></TableCell>
                   <TableCell><Skeleton className="h-4 w-16" /></TableCell>
                   <TableCell><Skeleton className="h-4 w-16" /></TableCell>
-                  <TableCell><Skeleton className="h-6 w-20 rounded-full" /></TableCell>
                   <TableCell><Skeleton className="h-6 w-20 rounded-full" /></TableCell>
                   <TableCell><Skeleton className="h-6 w-20 rounded-full" /></TableCell>
                   <TableCell><Skeleton className="h-8 w-8 rounded" /></TableCell>
@@ -262,6 +311,16 @@ export default function ProductsTable({
               products.map((product) => {
                 return (
                   <TableRow key={product.id} className="cursor-pointer hover:bg-muted/50">
+                    <TableCell>
+                      <Checkbox
+                        checked={selectedIds.includes(product.id)}
+                        onCheckedChange={(checked) =>
+                          handleSelectProduct(product.id, checked === true)
+                        }
+                        aria-label={`Select ${product.name}`}
+                        onClick={(event) => event.stopPropagation()}
+                      />
+                    </TableCell>
                     <TableCell>
                       <div className="relative h-12 w-12 rounded-md overflow-hidden bg-muted">
                         {product.images && product.images.length > 0 ? (
@@ -413,6 +472,7 @@ export default function ProductsTable({
         }}
         onDeleteSuccess={handleDeleteSuccess}
         product={selectedProduct}
+        products={bulkDeleteProducts}
       />
 
       <ProductFormModal

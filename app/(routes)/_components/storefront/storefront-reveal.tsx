@@ -4,13 +4,9 @@ import { useEffect, useRef, type ReactNode } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/utils";
+import { prefersReducedMotion } from "@/lib/utils/prefers-reduced-motion";
 
 gsap.registerPlugin(ScrollTrigger);
-
-function prefersReducedMotion(): boolean {
-  if (typeof window === "undefined") return false;
-  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-}
 
 type Props = {
   children: ReactNode;

@@ -12,53 +12,68 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { AlertTriangle, Loader2 } from 'lucide-react';
-import { useDeleteProduct } from '@/lib/hooks/useProductMutations';
+import { useDeleteProduct, useDeleteProducts } from '@/lib/hooks/useProductMutations';
 import { useQueryClient } from '@tanstack/react-query';
+
+type DeletableProduct = {
+  id: string;
+  name: string;
+  sku?: string | null;
+};
 
 interface ProductDeleteModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onDeleteSuccess?: () => void;
-  product: {
-    id: string;
-    name: string;
-    sku?: string | null;
-  } | null;
+  product?: DeletableProduct | null;
+  products?: DeletableProduct[];
 }
 
 export default function ProductDeleteModal({
   open,
   onOpenChange,
   onDeleteSuccess,
-  product,
+  product = null,
+  products,
 }: ProductDeleteModalProps) {
   const [isDeleting, setIsDeleting] = useState(false);
   const deleteProduct = useDeleteProduct();
+  const deleteProducts = useDeleteProducts();
   const queryClient = useQueryClient();
 
+  const targets =
+    products && products.length > 0
+      ? products
+      : product
+        ? [product]
+        : [];
+  const isBulk = targets.length > 1;
+
   const handleDelete = async () => {
-    if (!product) return;
+    if (!targets.length) return;
 
     setIsDeleting(true);
     try {
-      await deleteProduct.mutateAsync(product.id);
-      
-      // Force refetch all product queries immediately
-      await queryClient.refetchQueries({ 
+      if (isBulk) {
+        await deleteProducts.mutateAsync(targets.map((item) => item.id));
+        toast.success(`${targets.length} products have been deleted successfully.`);
+      } else {
+        await deleteProduct.mutateAsync(targets[0].id);
+        toast.success(`Product "${targets[0].name}" has been deleted successfully.`);
+      }
+
+      await queryClient.refetchQueries({
         queryKey: ['products'],
-        type: 'active'
+        type: 'active',
       });
-      
-      toast.success(`Product "${product.name}" has been deleted successfully.`);
-      
-      // Call success callback if provided
+
       if (onDeleteSuccess) {
         onDeleteSuccess();
       } else {
         onOpenChange(false);
       }
-    } catch (error) {
-      toast.error('Failed to delete product. Please try again.');
+    } catch {
+      // Error toast is handled by the mutation hook
     } finally {
       setIsDeleting(false);
     }
@@ -70,7 +85,7 @@ export default function ProductDeleteModal({
     }
   };
 
-  if (!product) return null;
+  if (!targets.length) return null;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -81,7 +96,9 @@ export default function ProductDeleteModal({
               <AlertTriangle className="h-6 w-6 text-destructive" />
             </div>
             <div>
-              <DialogTitle className="text-left">Delete Product</DialogTitle>
+              <DialogTitle className="text-left">
+                {isBulk ? 'Delete Products' : 'Delete Product'}
+              </DialogTitle>
               <DialogDescription className="text-left">
                 This action cannot be undone.
               </DialogDescription>
@@ -91,12 +108,18 @@ export default function ProductDeleteModal({
 
         <div className="space-y-4">
           <div className="rounded-lg bg-muted/50 p-4">
-            <h4 className="font-medium text-sm mb-2">Product to be deleted:</h4>
-            <div className="space-y-1">
-              <p className="font-semibold">{product.name}</p>
-              {product.sku && (
-                <p className="text-sm text-muted-foreground">SKU: {product.sku}</p>
-              )}
+            <h4 className="font-medium text-sm mb-2">
+              {isBulk ? 'Products to be deleted:' : 'Product to be deleted:'}
+            </h4>
+            <div className="max-h-40 space-y-2 overflow-y-auto">
+              {targets.map((item) => (
+                <div key={item.id} className="space-y-0.5">
+                  <p className="font-semibold">{item.name}</p>
+                  {item.sku ? (
+                    <p className="text-sm text-muted-foreground">SKU: {item.sku}</p>
+                  ) : null}
+                </div>
+              ))}
             </div>
           </div>
 
@@ -126,6 +149,7 @@ export default function ProductDeleteModal({
             variant="outline"
             onClick={handleCancel}
             disabled={isDeleting}
+            className="cursor-pointer"
           >
             Cancel
           </Button>
@@ -134,9 +158,14 @@ export default function ProductDeleteModal({
             variant="destructive"
             onClick={handleDelete}
             disabled={isDeleting}
+            className="cursor-pointer"
           >
             {isDeleting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {isDeleting ? 'Deleting...' : 'Delete Product'}
+            {isDeleting
+              ? 'Deleting...'
+              : isBulk
+                ? `Delete ${targets.length} Products`
+                : 'Delete Product'}
           </Button>
         </DialogFooter>
       </DialogContent>

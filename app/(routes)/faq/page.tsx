@@ -6,6 +6,15 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import {
+  storefrontCard,
+  storefrontEyebrow,
+  storefrontOutlineBtn,
+  storefrontPage,
+  storefrontPrimaryBtn,
+  storefrontTitle,
+} from "@/lib/storefront/surface";
+import { cn } from "@/lib/utils";
 
 const faqSections = [
   {
@@ -72,13 +81,12 @@ const faqSections = [
 
 export default function FaqPage() {
   return (
-    <div className="min-h-screen bg-zinc-50 pt-[var(--site-chrome-height,4rem)]">
+    <div className={storefrontPage}>
       <div className="container mx-auto px-4 py-12 md:py-16">
         <header className="mx-auto mb-10 max-w-2xl text-center">
-          <h1 className="text-4xl font-semibold tracking-tight text-zinc-900 md:text-5xl">
-            Frequently Asked Questions
-          </h1>
-          <p className="mt-4 text-lg text-zinc-600">
+          <p className={storefrontEyebrow}>Help</p>
+          <h1 className={storefrontTitle}>Frequently asked questions</h1>
+          <p className="mt-4 text-lg text-foreground/55">
             Quick answers about orders, shipping, payments, and your account.
           </p>
         </header>
@@ -86,20 +94,29 @@ export default function FaqPage() {
         <div className="mx-auto max-w-3xl space-y-8">
           {faqSections.map((section) => (
             <section key={section.title}>
-              <h2 className="mb-4 text-xl font-semibold text-zinc-900">{section.title}</h2>
-              <div className="overflow-hidden rounded-xl bg-white ring-1 ring-zinc-200/80">
+              <h2 className="mb-4 font-serif text-xl font-semibold text-foreground">
+                {section.title}
+              </h2>
+              <div
+                className={cn(
+                  storefrontCard,
+                  "overflow-hidden rounded-none"
+                )}
+              >
                 {section.items.map((item) => (
                   <details
                     key={item.question}
-                    className="group border-b border-zinc-200 last:border-b-0"
+                    className="group border-b border-brand-forest/15 last:border-b-0"
                   >
-                    <summary className="cursor-pointer list-none px-4 py-4 font-medium text-zinc-900 marker:content-none [&::-webkit-details-marker]:hidden">
+                    <summary className="cursor-pointer list-none px-4 py-4 font-medium text-foreground marker:content-none [&::-webkit-details-marker]:hidden">
                       <span className="flex items-center justify-between gap-4">
                         {item.question}
-                        <span className="text-zinc-400 transition group-open:rotate-45">+</span>
+                        <span className="text-brand-forest/40 transition group-open:rotate-45">
+                          +
+                        </span>
                       </span>
                     </summary>
-                    <p className="px-4 pb-4 text-sm leading-relaxed text-zinc-600">
+                    <p className="px-4 pb-4 text-sm leading-relaxed text-foreground/55">
                       {item.answer}
                     </p>
                   </details>
@@ -109,16 +126,21 @@ export default function FaqPage() {
           ))}
         </div>
 
-        <div className="mx-auto mt-12 max-w-xl rounded-2xl bg-white p-8 text-center ring-1 ring-zinc-200/80">
-          <h2 className="text-xl font-semibold text-zinc-900">Still need help?</h2>
-          <p className="mt-2 text-zinc-600">
+        <div
+          className={cn(
+            storefrontCard,
+            "mx-auto mt-12 max-w-xl rounded-none p-8 text-center"
+          )}
+        >
+          <h2 className="font-serif text-xl font-semibold text-foreground">Still need help?</h2>
+          <p className="mt-2 text-foreground/55">
             Our team is happy to answer anything not covered here.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
-            <Button asChild className="cursor-pointer">
+            <Button asChild className={cn(storefrontPrimaryBtn, "cursor-pointer")}>
               <Link href="/contact">Contact Us</Link>
             </Button>
-            <Button asChild variant="outline" className="cursor-pointer">
+            <Button asChild variant="outline" className={cn(storefrontOutlineBtn, "cursor-pointer")}>
               <Link href="/orders">Track Order</Link>
             </Button>
           </div>

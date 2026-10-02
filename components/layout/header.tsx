@@ -140,27 +140,27 @@ export function Header({ navCategories = [] }: HeaderProps) {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
                   align="end"
-                  className="min-w-48 rounded-xl border-zinc-200 bg-white p-1 text-zinc-900 shadow-md"
+                  className="min-w-48 rounded-none border-brand-forest/15 bg-brand-ivory p-1 text-foreground shadow-md"
                 >
-                  <DropdownMenuLabel className="font-medium text-zinc-900">
+                  <DropdownMenuLabel className="font-serif text-sm tracking-tight text-foreground">
                     {profile?.name || user?.email || "User"}
                   </DropdownMenuLabel>
-                  <DropdownMenuSeparator className="bg-zinc-200" />
-                  <DropdownMenuItem asChild className="cursor-pointer text-zinc-700 focus:bg-zinc-100 focus:text-zinc-900">
+                  <DropdownMenuSeparator className="bg-brand-forest/10" />
+                  <DropdownMenuItem asChild className="cursor-pointer text-foreground/70 focus:bg-brand-champagne/40 focus:text-foreground">
                     <Link href="/my-account">Profile</Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild className="cursor-pointer text-zinc-700 focus:bg-zinc-100 focus:text-zinc-900">
+                  <DropdownMenuItem asChild className="cursor-pointer text-foreground/70 focus:bg-brand-champagne/40 focus:text-foreground">
                     <Link href="/wishlist">Wishlist</Link>
                   </DropdownMenuItem>
                   {profile?.role === UserRole.ADMIN ? (
-                    <DropdownMenuItem asChild className="cursor-pointer text-zinc-700 focus:bg-zinc-100 focus:text-zinc-900">
+                    <DropdownMenuItem asChild className="cursor-pointer text-foreground/70 focus:bg-brand-champagne/40 focus:text-foreground">
                       <Link href="/admin">
                         <LayoutDashboard className="mr-2 inline h-4 w-4" />
                         Admin
                       </Link>
                     </DropdownMenuItem>
                   ) : null}
-                  <DropdownMenuSeparator className="bg-zinc-200" />
+                  <DropdownMenuSeparator className="bg-brand-forest/10" />
                   <DropdownMenuItem
                     variant="destructive"
                     onClick={handleLogout}
@@ -175,7 +175,7 @@ export function Header({ navCategories = [] }: HeaderProps) {
                 asChild
                 variant="outline"
                 size="sm"
-                className="cursor-pointer border-zinc-900/80 bg-transparent px-3.5 text-zinc-900 shadow-none hover:bg-zinc-900 hover:text-white"
+                className="cursor-pointer border-brand-forest/40 bg-transparent px-3.5 text-brand-forest shadow-none hover:bg-brand-forest hover:text-brand-champagne"
               >
                 <Link href="/auth/login">Sign in</Link>
               </Button>
@@ -211,14 +211,17 @@ export function Header({ navCategories = [] }: HeaderProps) {
               </SheetTrigger>
               <SheetContent
                 side="right"
-                className="z-[3000] w-[min(100vw,22rem)] gap-0 overflow-hidden border-l border-brand-forest/10 bg-brand-ivory p-0 sm:max-w-[22rem]"
+                className="z-[3000] w-[min(100vw,22rem)] gap-0 overflow-hidden border-l border-brand-forest/10 bg-brand-ivory p-0 shadow-xl sm:max-w-[22rem]"
               >
                 <SheetTitle className="sr-only">Main menu</SheetTitle>
                 <SheetDescription className="sr-only">
                   Site navigation and account links
                 </SheetDescription>
                 <div className="flex h-full min-h-0 flex-col overflow-hidden px-6 pb-6 pt-8">
-                  <div className="mb-10 shrink-0 animate-in fade-in duration-500">
+                  <div className="mb-8 shrink-0 animate-in fade-in duration-500">
+                    <p className="mb-4 font-serif text-[0.65rem] font-semibold tracking-[0.28em] text-brand-forest/55 uppercase">
+                      Menu
+                    </p>
                     <Link href="/" className="inline-flex cursor-pointer flex-col items-start gap-2">
                       <Image
                         src={LOGO_PATH}
@@ -227,7 +230,7 @@ export function Header({ navCategories = [] }: HeaderProps) {
                         height={120}
                         className="h-16 w-auto"
                       />
-                      <span className="font-serif text-[0.65rem] font-semibold tracking-[0.28em] text-foreground/55 uppercase">
+                      <span className="font-serif text-[0.65rem] font-semibold tracking-[0.28em] text-brand-forest/50 uppercase">
                         Clothing Brand
                       </span>
                     </Link>
@@ -237,7 +240,7 @@ export function Header({ navCategories = [] }: HeaderProps) {
                     <div className="mb-8 flex shrink-0 items-center gap-3 animate-in fade-in duration-500 delay-75">
                       <div className="h-9 w-9 overflow-hidden rounded-full">
                         {isLoading ? (
-                          <div className="h-full w-full animate-pulse rounded-full bg-black/10" />
+                          <div className="h-full w-full animate-pulse rounded-full bg-brand-forest/10" />
                         ) : (
                           <UserInitialsAvatar
                             name={profile?.name || user?.user_metadata?.name}
@@ -248,19 +251,19 @@ export function Header({ navCategories = [] }: HeaderProps) {
                       </div>
                       <div className="min-w-0 flex-1">
                         {isLoading ? (
-                          <div className="h-4 w-24 animate-pulse rounded bg-black/10" />
+                          <div className="h-4 w-24 animate-pulse rounded bg-brand-forest/10" />
                         ) : (
                           <p className="truncate text-sm text-foreground">
                             {profile?.name || user?.email || "User"}
                           </p>
                         )}
-                        <p className="text-xs text-foreground/45">Welcome back</p>
+                        <p className="text-xs text-brand-forest/45">Welcome back</p>
                       </div>
                     </div>
                   ) : null}
 
                   <nav className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto overscroll-contain">
-                    <p className="mb-3 font-serif text-[0.65rem] font-semibold tracking-[0.28em] text-foreground/45 uppercase">
+                    <p className="mb-3 font-serif text-[0.65rem] font-semibold tracking-[0.28em] text-brand-forest/50 uppercase">
                       Shop
                     </p>
                     <div className="flex flex-col border-t border-brand-forest/10">
@@ -273,7 +276,7 @@ export function Header({ navCategories = [] }: HeaderProps) {
                         >
                           <span className="relative inline-block">
                             {link.label}
-                            <span className="absolute inset-x-0 -bottom-0.5 h-px origin-left scale-x-0 bg-foreground transition-transform duration-300 group-hover:scale-x-100" />
+                            <span className="absolute inset-x-0 -bottom-0.5 h-px origin-left scale-x-0 bg-brand-forest transition-transform duration-300 group-hover:scale-x-100" />
                           </span>
                         </Link>
                       ))}
@@ -292,7 +295,7 @@ export function Header({ navCategories = [] }: HeaderProps) {
                         >
                           <span className="relative inline-block">
                             {link.label}
-                            <span className="absolute inset-x-0 -bottom-0.5 h-px origin-left scale-x-0 bg-foreground transition-transform duration-300 group-hover:scale-x-100" />
+                            <span className="absolute inset-x-0 -bottom-0.5 h-px origin-left scale-x-0 bg-brand-forest transition-transform duration-300 group-hover:scale-x-100" />
                           </span>
                         </Link>
                       ))}

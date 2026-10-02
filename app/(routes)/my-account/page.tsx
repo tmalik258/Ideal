@@ -30,6 +30,7 @@ import { useAuth } from "@/lib/hooks/useAuth";
 import { ProfileInfoCard } from "./_components/profile-info-card";
 import { UserProfile } from "@/lib/types";
 import { AxiosError } from "axios";
+import { storefrontPage } from "@/lib/storefront/surface";
 
 export default function MyAccountPage() {
   const { profile, isAuthenticated, refreshProfile } = useAuth();
@@ -288,7 +289,7 @@ export default function MyAccountPage() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-50 pt-[var(--site-chrome-height,4rem)]">
+    <div className={storefrontPage}>
       {/* Error Alert */}
       {lastError && !isLoadingProfile && (
         <div className="bg-red-600 text-white p-2 text-center text-sm">

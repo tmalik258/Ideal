@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, Lock, User } from "lucide-react";
 import { UserInitialsAvatar } from "@/components/ui/user-initials-avatar";
+import { storefrontCard, storefrontOutlineBtn } from "@/lib/storefront/surface";
+import { cn } from "@/lib/utils";
 
-const actionButtonClass =
-  "cursor-pointer rounded-none border-zinc-900 text-zinc-900 hover:bg-zinc-900 hover:text-white";
+const actionButtonClass = cn(storefrontOutlineBtn, "rounded-none");
 
 const ProfileOverview = ({
   name,
@@ -18,17 +19,17 @@ const ProfileOverview = ({
 }) => {
   return (
     <div className="container mx-auto mb-8 px-4">
-      <div className="mb-6 rounded-2xl border border-zinc-200 bg-white p-8 shadow-sm md:p-10">
+      <div className={cn(storefrontCard, "mb-6 p-8 md:p-10")}>
         <div className="mb-6 flex items-center gap-2">
-          <CheckCircle2 className="h-6 w-6 text-zinc-900" aria-hidden />
-          <h2 className="text-xl font-semibold text-zinc-900">Profile Overview</h2>
+          <CheckCircle2 className="h-6 w-6 text-brand-forest" aria-hidden />
+          <h2 className="font-serif text-xl font-semibold text-foreground">Profile Overview</h2>
         </div>
 
         <div className="mb-6 flex flex-col items-center gap-6 md:flex-row md:items-center">
           <UserInitialsAvatar name={name} email={email} size="xl" />
           <div className="flex-1 text-center md:text-left">
-            <h1 className="mb-2 text-2xl font-bold text-zinc-900">{name}</h1>
-            <p className="mb-4 text-zinc-600">{email}</p>
+            <h1 className="mb-2 text-2xl font-bold text-foreground">{name}</h1>
+            <p className="mb-4 text-foreground/55">{email}</p>
             <div className="hidden gap-3 sm:inline-flex">
               <Button
                 variant="outline"

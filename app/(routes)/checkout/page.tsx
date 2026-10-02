@@ -15,6 +15,12 @@ import {
 } from "./_components";
 import type { PromoCodeValidationResponse, PromoCodeApplicationResponse } from "@/lib/types/promo-code";
 import { SITE_CURRENCY } from "@/lib/site-metadata";
+import {
+  storefrontEyebrow,
+  storefrontPage,
+  storefrontTitle,
+} from "@/lib/storefront/surface";
+import { cn } from "@/lib/utils";
 
 export default function CheckoutPage() {
   const { items: cartItems, getTotalPrice, clearCartSilently } = useCartStore();
@@ -23,8 +29,6 @@ export default function CheckoutPage() {
   const isSignedIn = Boolean(profile?.id);
 
   const [paymentMethod, setPaymentMethod] = useState("cod");
-  const [selectedShippingMethod, setSelectedShippingMethod] =
-    useState("standard");
   // Removed currentStep state for single-page layout
   const [formErrors, setFormErrors] = useState({
     name: "",
@@ -432,10 +436,14 @@ export default function CheckoutPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-zinc-50 pt-[var(--site-chrome-height,4rem)]">
-      {/* Removed HeroSection */}
-
-      <div className="container mx-auto px-4 pb-16">
+    <div className={storefrontPage}>
+      <div className="container mx-auto px-4 pb-16 pt-10 md:pt-12">
+        <header className="mb-10">
+          <p className={storefrontEyebrow}>Checkout</p>
+          <h1 className={cn(storefrontTitle, "text-[clamp(1.5rem,3vw,2.25rem)]")}>
+            Complete your order
+          </h1>
+        </header>
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Left Column - Shipping Information */}
@@ -445,8 +453,6 @@ export default function CheckoutPage() {
                 formData={formData}
                 formErrors={formErrors}
                 handleInputChange={handleInputChange}
-                selectedMethod={selectedShippingMethod}
-                onMethodChange={setSelectedShippingMethod}
               />
 
               {/* Payment Method */}

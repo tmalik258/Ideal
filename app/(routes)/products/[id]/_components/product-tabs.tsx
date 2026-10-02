@@ -3,17 +3,14 @@
 import { useCallback, useLayoutEffect, useRef, useState } from "react";
 import { ProductTabsSkeleton } from "../../_components/product-skeleton";
 import { cn } from "@/lib/utils";
+import { storefrontCard, storefrontEyebrow } from "@/lib/storefront/surface";
 import { SITE_CURRENCY } from "@/lib/site-metadata";
-
-interface Specification {
-  label: string;
-  value: string;
-}
+import type { ProductAttribute } from "@/lib/storefront/parse-product-description";
 
 interface Product {
   longDescription?: string;
   keyFeatures: string[];
-  specifications: Specification[];
+  specifications: ProductAttribute[];
 }
 
 interface ProductTabsProps {
@@ -29,6 +26,29 @@ const TABS: { id: TabType; label: string }[] = [
   { id: "shipping", label: "Shipping" },
   { id: "returns", label: "Returns" },
 ];
+
+function TabSectionTitle({ children }: { children: React.ReactNode }) {
+  return (
+    <h3 className="mb-4 font-serif text-xl font-semibold tracking-tight text-foreground">
+      {children}
+    </h3>
+  );
+}
+
+function BulletList({ items }: { items: string[] }) {
+  return (
+    <ul className="space-y-3">
+      {items.map((text) => (
+        <li key={text} className="flex items-start gap-3">
+          <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-forest" />
+          <span className="text-sm leading-relaxed text-foreground/60 sm:text-base">
+            {text}
+          </span>
+        </li>
+      ))}
+    </ul>
+  );
+}
 
 export function ProductTabs({ product, loading = false }: ProductTabsProps) {
   const [activeTab, setActiveTab] = useState<TabType>("description");
@@ -74,26 +94,32 @@ export function ProductTabs({ product, loading = false }: ProductTabsProps) {
 
   if (!product) {
     return (
-      <div className="rounded-2xl border border-zinc-200 bg-white p-8 shadow-sm">
+      <div className={cn(storefrontCard, "p-8")}>
         <div className="py-8 text-center">
-          <p className="text-zinc-600">Product details not available</p>
+          <p className="text-foreground/55">Product details not available</p>
         </div>
       </div>
     );
   }
 
+  const hasSpecs = product.specifications.length > 0;
+  const hasFeatures = product.keyFeatures.length > 0;
+  const hasDescription = Boolean(product.longDescription?.trim());
+
   return (
-    <div className="rounded-2xl p-4 sm:p-8">
+    <div className="space-y-6">
+      <p className={storefrontEyebrow}>Details</p>
+
       <div
         ref={listRef}
-        className="relative mb-8 flex max-w-full gap-3 overflow-x-auto scroll-smooth max-md:py-1 sm:gap-4"
+        className="relative flex max-w-full gap-2 overflow-x-auto scroll-smooth border-b border-brand-forest/10 pb-px sm:gap-3"
         role="tablist"
         aria-label="Product details"
       >
         <div
           aria-hidden
           className={cn(
-            "pointer-events-none absolute top-0 h-full rounded-lg bg-zinc-900",
+            "pointer-events-none absolute bottom-0 h-[2px] bg-brand-forest",
             indicator.ready
               ? "transition-[left,width] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
               : "opacity-0"
@@ -114,10 +140,10 @@ export function ProductTabs({ product, loading = false }: ProductTabsProps) {
               aria-selected={isActive}
               onClick={() => setActiveTab(tab.id)}
               className={cn(
-                "relative z-10 cursor-pointer whitespace-nowrap rounded-lg px-4 py-2 text-sm font-semibold transition-colors duration-200 sm:text-base",
+                "relative z-10 cursor-pointer whitespace-nowrap px-3 py-3 font-serif text-sm tracking-tight transition-colors duration-200 sm:px-4 sm:text-base",
                 isActive
-                  ? "text-white"
-                  : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
+                  ? "text-brand-forest"
+                  : "text-foreground/45 hover:text-foreground/70"
               )}
             >
               {tab.label}
@@ -126,89 +152,91 @@ export function ProductTabs({ product, loading = false }: ProductTabsProps) {
         })}
       </div>
 
-      <div className="rounded-2xl border border-zinc-200 bg-white p-6 text-zinc-900 shadow-sm">
-        {activeTab === "description" && (
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-            <div className="rounded-2xl p-4">
-              <h3 className="mb-4 text-xl font-semibold">Description</h3>
-              <p className="mb-6 leading-relaxed text-zinc-600">
-                {product.longDescription || "No detailed description available."}
-              </p>
-            </div>
-            <div className="rounded-2xl p-4">
-              <h3 className="mb-4 text-xl font-semibold">Key Features</h3>
-              {product.keyFeatures && product.keyFeatures.length > 0 ? (
-                <ul className="space-y-3">
-                  {product.keyFeatures.map((feature, index) => (
-                    <li key={index} className="flex items-start space-x-3">
-                      <div className="mt-2 h-2 w-2 flex-shrink-0 rounded-full bg-zinc-900" />
-                      <span className="text-zinc-600">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
+      <div className={cn(storefrontCard, "p-6 sm:p-8")}>
+        {activeTab === "description" ? (
+          <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
+            <div>
+              <TabSectionTitle>Description</TabSectionTitle>
+              {hasDescription ? (
+                <p className="text-sm leading-relaxed text-foreground/60 sm:text-base">
+                  {product.longDescription}
+                </p>
+              ) : hasSpecs ? (
+                <p className="text-sm leading-relaxed text-foreground/60 sm:text-base">
+                  See the specifications for fabric, cut, and wear details.
+                </p>
               ) : (
-                <p className="text-zinc-500">No key features listed.</p>
+                <p className="text-foreground/45">No detailed description available.</p>
+              )}
+            </div>
+            <div>
+              <TabSectionTitle>Key Features</TabSectionTitle>
+              {hasFeatures ? (
+                <BulletList items={product.keyFeatures} />
+              ) : hasSpecs ? (
+                <BulletList
+                  items={product.specifications.map(
+                    (spec) => `${spec.label}: ${spec.value}`
+                  )}
+                />
+              ) : (
+                <p className="text-foreground/45">No key features listed.</p>
               )}
             </div>
           </div>
-        )}
+        ) : null}
 
-        {activeTab === "specifications" && (
-          <div className="rounded-2xl p-4">
-            <h3 className="mb-6 text-xl font-semibold">Specifications</h3>
-            {product.specifications && product.specifications.length > 0 ? (
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                {product.specifications.map((spec, index) => (
-                  <div key={index} className="flex justify-between border-b border-zinc-200 py-3">
-                    <span className="font-medium text-zinc-600">{spec.label}:</span>
-                    <span className="ml-4 flex-1 text-right text-zinc-900">{spec.value}</span>
+        {activeTab === "specifications" ? (
+          <div>
+            <TabSectionTitle>Specifications</TabSectionTitle>
+            {hasSpecs ? (
+              <div className="grid grid-cols-1 gap-x-10 gap-y-1 md:grid-cols-2">
+                {product.specifications.map((spec) => (
+                  <div
+                    key={`${spec.label}-${spec.value}`}
+                    className="flex justify-between gap-4 border-b border-brand-forest/10 py-3.5"
+                  >
+                    <span className="font-serif text-[0.65rem] font-semibold tracking-[0.16em] text-brand-forest/50 uppercase">
+                      {spec.label}
+                    </span>
+                    <span className="text-right text-sm text-foreground">
+                      {spec.value}
+                    </span>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-zinc-500">No specifications available.</p>
+              <p className="text-foreground/45">No specifications available.</p>
             )}
           </div>
-        )}
+        ) : null}
 
-        {activeTab === "shipping" && (
-          <div className="rounded-2xl p-4">
-            <h3 className="mb-4 text-xl font-semibold">Shipping Information</h3>
-            <div className="space-y-4">
-              {[
+        {activeTab === "shipping" ? (
+          <div>
+            <TabSectionTitle>Shipping Information</TabSectionTitle>
+            <BulletList
+              items={[
                 `Free shipping on orders over 50 ${SITE_CURRENCY}`,
                 "Standard delivery: 3-5 business days",
-                "Express delivery: 1-2 business days (additional charges apply)",
-                "Same-day delivery available in Lahore",
-              ].map((text) => (
-                <div key={text} className="flex items-start space-x-3">
-                  <div className="mt-2 h-2 w-2 flex-shrink-0 rounded-full bg-zinc-900" />
-                  <p className="text-zinc-600">{text}</p>
-                </div>
-              ))}
-            </div>
+              ]}
+            />
           </div>
-        )}
+        ) : null}
 
-        {activeTab === "returns" && (
-          <div className="rounded-2xl p-4">
-            <h3 className="mb-4 text-xl font-semibold">Returns & Exchanges</h3>
-            <div className="space-y-4">
-              {[
+        {activeTab === "returns" ? (
+          <div>
+            <TabSectionTitle>Returns &amp; Exchanges</TabSectionTitle>
+            <BulletList
+              items={[
                 "30-day return policy for all items",
                 "Items must be in original condition with tags attached",
                 "Free returns for defective or damaged items",
                 "Exchange available for different sizes or colors",
                 "Refunds processed within 5-7 business days",
-              ].map((text) => (
-                <div key={text} className="flex items-start space-x-3">
-                  <div className="mt-2 h-2 w-2 flex-shrink-0 rounded-full bg-zinc-900" />
-                  <p className="text-zinc-600">{text}</p>
-                </div>
-              ))}
-            </div>
+              ]}
+            />
           </div>
-        )}
+        ) : null}
       </div>
     </div>
   );
