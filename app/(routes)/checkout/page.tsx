@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import axios from "axios";
@@ -13,8 +13,11 @@ import {
   PaymentMethod,
   CheckoutPageSkeleton,
 } from "./_components";
-import type { PromoCodeValidationResponse, PromoCodeApplicationResponse } from "@/lib/types/promo-code";
-import { SITE_CURRENCY } from "@/lib/site-metadata";
+import type {
+  PromoCodeValidationResponse,
+  PromoCodeApplicationResponse,
+} from "@/lib/types/promo-code";
+import { formatStorefrontPrice } from "@/lib/site-metadata";
 import {
   storefrontEyebrow,
   storefrontPage,
@@ -22,142 +25,121 @@ import {
 } from "@/lib/storefront/surface";
 import { cn } from "@/lib/utils";
 
+type CheckoutFormData = {
+  name: string;
+  email: string;
+  phone: string;
+  street: string;
+  city: string;
+  area: string;
+  postalCode: string;
+};
+
+type CheckoutFormErrors = {
+  name: string;
+  email: string;
+  phone: string;
+  street: string;
+  city: string;
+  area: string;
+  postalCode: string;
+};
+
+const EMPTY_ERRORS: CheckoutFormErrors = {
+  name: "",
+  email: "",
+  phone: "",
+  street: "",
+  city: "",
+  area: "",
+  postalCode: "",
+};
+
+function getValidationErrors(formData: CheckoutFormData): CheckoutFormErrors {
+  const errors: CheckoutFormErrors = { ...EMPTY_ERRORS };
+
+  if (!formData.name.trim()) {
+    errors.name = "Full name is required";
+  }
+  if (!formData.email.trim()) {
+    errors.email = "Email is required";
+  } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+    errors.email = "Please enter a valid email";
+  }
+  if (!formData.phone.trim()) {
+    errors.phone = "Phone number is required";
+  } else if (
+    !/^[\+]?[1-9][\d]{0,15}$/.test(formData.phone.replace(/[\s\-\(\)]/g, ""))
+  ) {
+    errors.phone = "Please enter a valid phone number";
+  }
+
+  if (!formData.city.trim()) {
+    errors.city = "City is required";
+  }
+  if (!formData.area.trim()) {
+    errors.area = "Area is required";
+  }
+  if (!formData.postalCode.trim()) {
+    errors.postalCode = "Postal code is required";
+  } else if (formData.postalCode.trim().length < 3) {
+    errors.postalCode = "Please enter a valid postal code";
+  }
+
+  return errors;
+}
+
+function hasRequiredErrors(errors: CheckoutFormErrors): boolean {
+  return Boolean(
+    errors.name ||
+      errors.email ||
+      errors.phone ||
+      errors.city ||
+      errors.area ||
+      errors.postalCode
+  );
+}
+
 export default function CheckoutPage() {
   const { items: cartItems, getTotalPrice, clearCartSilently } = useCartStore();
   const { profile } = useUserStore();
   const router = useRouter();
   const isSignedIn = Boolean(profile?.id);
 
-  const [paymentMethod, setPaymentMethod] = useState("cod");
-  // Removed currentStep state for single-page layout
-  const [formErrors, setFormErrors] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    street: "",
-    city: "",
-    area: "",
-    postalCode: "",
-  });
+  const [formErrors, setFormErrors] = useState<CheckoutFormErrors>(EMPTY_ERRORS);
+  const [showErrors, setShowErrors] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isConfirming, setIsConfirming] = useState(false);
   const [promoCode, setPromoCode] = useState("");
   const [appliedPromoCode, setAppliedPromoCode] = useState<string | null>(null);
   const [promoCodeDiscount, setPromoCodeDiscount] = useState(0);
   const [isApplyingPromoCode, setIsApplyingPromoCode] = useState(false);
-  const [formData, setFormData] = useState({
-    // Personal Information
+  const [formData, setFormData] = useState<CheckoutFormData>({
     name: "",
     email: "",
     phone: "",
-
-    // Shipping Information
     street: "",
     city: "",
     area: "",
     postalCode: "",
   });
-
-  // State to store created order ID
-  const [createdOrderId, setCreatedOrderId] = useState<string | null>(null);
-
-  // State to track form validation
-  const [isFormValid, setIsFormValid] = useState(false);
-
-  // Form validation function
-  const validateForm = () => {
-    const errors = {
-      name: "",
-      email: "",
-      phone: "",
-      street: "",
-      city: "",
-      area: "",
-      postalCode: "",
-    };
-
-    try {
-      // Personal Information
-      if (!formData.name.trim()) {
-        errors.name = "Full name is required";
-      }
-      if (!formData.email.trim()) {
-        errors.email = "Email is required";
-      } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-        errors.email = "Please enter a valid email";
-      }
-      if (!formData.phone.trim()) {
-        errors.phone = "Phone number is required";
-      } else if (
-        !/^[\+]?[1-9][\d]{0,15}$/.test(
-          formData.phone.replace(/[\s\-\(\)]/g, "")
-        )
-      ) {
-        errors.phone = "Please enter a valid phone number";
-      }
-
-      // Shipping Address (street is optional)
-      if (!formData.city.trim()) {
-        errors.city = "City is required";
-      }
-      if (!formData.area.trim()) {
-        errors.area = "Area is required";
-      }
-      if (!formData.postalCode.trim()) {
-        errors.postalCode = "Postal code is required";
-      } else if (formData.postalCode.trim().length < 3) {
-        errors.postalCode = "Please enter a valid postal code";
-      }
-
-      setFormErrors(errors);
-
-      // Check if all required fields are valid (no errors for required fields)
-      const hasErrors =
-        errors.name ||
-        errors.email ||
-        errors.phone ||
-        errors.city ||
-        errors.area ||
-        errors.postalCode;
-
-      return !hasErrors;
-    } catch (error) {
-      console.log("Form validation error:", error);
-      return false;
-    }
-  };
-
-  // Handle successful payment completion - only called after order is fully processed
-  const handlePaymentSuccess = () => {
-    // Clear cart silently without showing notification for checkout completion
-    clearCartSilently();
-    // Redirect to order confirmed page with the created order ID
-    if (createdOrderId) {
-      router.push(`/order-confirmed?orderId=${createdOrderId}`);
-    } else {
-      router.push(`/order-confirmed`);
-    }
-  };
-
-  // Payment data for PaymentMethod component
   const [paymentData, setPaymentData] = useState({
     selectedPaymentType: "cod",
     saveCard: false,
   });
 
-  // Wrapper function to handle PaymentMethod's onPaymentDataChange
   const handlePaymentDataChange = (data: {
     paymentMethod?: string;
     paymentStatus?: string;
     selectedPaymentType?: string;
     saveCard?: boolean;
   }) => {
-    setPaymentData(prev => ({
+    setPaymentData((prev) => ({
       selectedPaymentType: data.selectedPaymentType ?? prev.selectedPaymentType,
       saveCard: data.saveCard ?? prev.saveCard,
     }));
   };
 
-  // Check if cart is empty and redirect
   useEffect(() => {
     setIsLoading(false);
     if (cartItems.length === 0) {
@@ -166,7 +148,6 @@ export default function CheckoutPage() {
     }
   }, [router, cartItems.length]);
 
-  // Prefill shipping contact from signed-in profile
   useEffect(() => {
     if (!profile) return;
     setFormData((prev) => ({
@@ -177,43 +158,27 @@ export default function CheckoutPage() {
   }, [profile]);
 
   const subtotal = getTotalPrice();
-  const shipping = subtotal > 100 ? 0 : 9.99;
-  const tax = subtotal * 0.08;
+  const shipping = 200;
+  const tax = 0;
   const discount = isSignedIn ? promoCodeDiscount : 0;
   const total = Math.max(0, subtotal + shipping + tax - discount);
 
-  // Initialize form validation on component mount
-  useEffect(() => {
-    const isValid = validateForm();
-    setIsFormValid(isValid);
-  }, []);
-
-  // Show loading skeleton while checking cart
-  if (isLoading) {
-    return <CheckoutPageSkeleton />;
-  }
-
-  // Show error if cart is empty
-  if (cartItems.length === 0) {
-    return (
-      <ErrorComponent
-        title="Cart is Empty"
-        message="Your cart is empty. Please add some items before proceeding to checkout."
-      />
-    );
-  }
+  const syncErrorsIfNeeded = useCallback(
+    (nextFormData: CheckoutFormData, shouldShow: boolean) => {
+      if (!shouldShow) return;
+      setFormErrors(getValidationErrors(nextFormData));
+    },
+    []
+  );
 
   const handleInputChange = (field: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-
-    // Validate form whenever input changes
-    setTimeout(() => {
-      const isValid = validateForm();
-      setIsFormValid(isValid);
-    }, 100);
+    setFormData((prev) => {
+      const next = { ...prev, [field]: value };
+      syncErrorsIfNeeded(next, showErrors);
+      return next;
+    });
   };
 
-  // Handle promo code application
   const applyPromoCode = async () => {
     if (!isSignedIn) {
       toast.error("Sign in to use promo codes");
@@ -233,12 +198,12 @@ export default function CheckoutPage() {
     setIsApplyingPromoCode(true);
 
     try {
-      // First validate the promo code
+      const orderTotal = subtotal + shipping + tax;
       const validationResponse = await axios.post<PromoCodeValidationResponse>(
         "/api/promo-codes/validate",
         {
           code: promoCode.trim(),
-          orderTotal: subtotal + shipping + tax
+          orderTotal,
         }
       );
 
@@ -247,12 +212,11 @@ export default function CheckoutPage() {
         return;
       }
 
-      // Apply the promo code
       const applicationResponse = await axios.post<PromoCodeApplicationResponse>(
         "/api/promo-codes/apply",
         {
           code: promoCode.trim(),
-          orderTotal: subtotal + shipping + tax
+          orderTotal,
         }
       );
 
@@ -260,7 +224,7 @@ export default function CheckoutPage() {
         setAppliedPromoCode(promoCode.trim());
         setPromoCodeDiscount(applicationResponse.data.discountAmount ?? 0);
         toast.success(
-          `Promo code applied! You saved ${SITE_CURRENCY} ${applicationResponse.data.discountAmount?.toFixed(2) || '0'}`
+          `Promo code applied! You saved ${formatStorefrontPrice(applicationResponse.data.discountAmount ?? 0)}`
         );
       } else {
         toast.error(applicationResponse.data.error || "Failed to apply promo code");
@@ -277,7 +241,6 @@ export default function CheckoutPage() {
     }
   };
 
-  // Handle promo code removal
   const removePromoCode = () => {
     setAppliedPromoCode(null);
     setPromoCodeDiscount(0);
@@ -285,67 +248,67 @@ export default function CheckoutPage() {
     toast.success("Promo code removed");
   };
 
-  // Validate shipping address with API
   const validateShippingAddress = async () => {
     try {
-      const addressData = {
-        name: formData.name,
-        email: formData.email,
-        phone: formData.phone,
-        street: formData.street,
-        city: formData.city,
-        area: formData.area,
-        postalCode: formData.postalCode,
-      };
-
       const response = await fetch("/api/shipping/validate-address", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(addressData),
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          street: formData.street,
+          city: formData.city,
+          area: formData.area,
+          postalCode: formData.postalCode,
+        }),
       });
 
       const result = await response.json();
 
       if (!result.isValid) {
-        const errorMessage = result.issues?.join(', ') || 'Invalid address';
+        const errorMessage = result.issues?.join(", ") || "Invalid address";
         toast.error(`Address validation failed: ${errorMessage}`);
         return false;
       }
 
-      // Show suggestions if any (non-blocking)
       if (result.suggestions && result.suggestions.length > 0) {
-        toast.info(`Suggestion: ${result.suggestions.join(', ')}`);
+        toast.info(`Suggestion: ${result.suggestions.join(", ")}`);
       }
 
       return true;
     } catch (error) {
       console.log("Address validation error:", error);
-      // If the API fails, we'll continue with the checkout process
-      toast.warning("Address validation service unavailable, proceeding with checkout");
+      toast.warning(
+        "Address validation service unavailable, proceeding with checkout"
+      );
       return true;
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent): Promise<string | null> => {
-    e.preventDefault();
+  const handleConfirmOrder = async () => {
+    setShowErrors(true);
+    const errors = getValidationErrors(formData);
+    setFormErrors(errors);
 
-    if (!validateForm()) {
+    if (hasRequiredErrors(errors)) {
       toast.error("Please fix the errors in the form before submitting");
-      return null;
+      return;
     }
 
+    setIsConfirming(true);
     toast.info("Submitting order...");
 
     try {
-      // Validate shipping address
       const isAddressValid = await validateShippingAddress();
       if (!isAddressValid) {
-        return null;
+        return;
       }
 
-      // Prepare order data for submission (matching API schema)
+      const paymentMethod = paymentData.selectedPaymentType || "cod";
+
       const orderData = {
         ...(profile?.id ? { userId: profile.id } : {}),
         email: formData.email,
@@ -362,16 +325,15 @@ export default function CheckoutPage() {
           postalCode: formData.postalCode,
           phone: formData.phone,
         },
-        paymentMethod: paymentMethod,
-        subtotal: subtotal,
-        tax: tax,
-        shipping: shipping,
-        discount: discount,
+        paymentMethod,
+        subtotal,
+        tax,
+        shipping,
+        discount,
         totalAmount: total,
         promoCode: isSignedIn ? appliedPromoCode : null,
       };
 
-      // Submit order to API
       const response = await fetch("/api/orders/submit", {
         method: "POST",
         headers: {
@@ -388,23 +350,21 @@ export default function CheckoutPage() {
             ? result.error
             : result.error?.message || "Failed to place order";
         toast.error(errorMessage);
-        return null;
+        return;
       }
 
-      toast.success("Order placed successfully!");
+      const orderId = result.orderId || null;
+      toast.success("Order placed with Cash on Delivery!");
+      clearCartSilently();
 
-      // Set the created order ID
-      setCreatedOrderId(result.orderId || null);
-
-      // DO NOT clear cart or redirect here - let payment processing complete first
-      // The handlePaymentSuccess function will handle clearing cart and redirecting
-
-      // Return the order ID for payment processing
-      return result.orderId || null;
+      if (orderId) {
+        router.push(`/order-confirmed?orderId=${orderId}`);
+      } else {
+        router.push("/order-confirmed");
+      }
     } catch (error: unknown) {
       console.log("Order failed:", error);
 
-      // Provide more specific error messages based on error type
       if (error instanceof Error) {
         if (error.name === "TypeError" && error.message.includes("fetch")) {
           toast.error(
@@ -422,73 +382,71 @@ export default function CheckoutPage() {
       } else {
         toast.error("Failed to place order. Please try again.");
       }
-
-      return null;
     } finally {
-      setIsLoading(false);
+      setIsConfirming(false);
     }
   };
 
-  const breadcrumbItems = [
-    { label: "Home", href: "/" },
-    { label: "Cart", href: "/cart" },
-    { label: "Checkout", isActive: true },
-  ];
+  if (isLoading) {
+    return <CheckoutPageSkeleton />;
+  }
+
+  if (cartItems.length === 0) {
+    return (
+      <ErrorComponent
+        title="Cart is Empty"
+        message="Your cart is empty. Please add some items before proceeding to checkout."
+      />
+    );
+  }
 
   return (
     <div className={storefrontPage}>
       <div className="container mx-auto px-4 pb-16 pt-10 md:pt-12">
         <header className="mb-10">
           <p className={storefrontEyebrow}>Checkout</p>
-          <h1 className={cn(storefrontTitle, "text-[clamp(1.5rem,3vw,2.25rem)]")}>
+          <h1
+            className={cn(storefrontTitle, "text-[clamp(1.5rem,3vw,2.25rem)]")}
+          >
             Complete your order
           </h1>
         </header>
-        <form onSubmit={handleSubmit}>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Left Column - Shipping Information */}
-            <div className="lg:col-span-2 space-y-6">
-              {/* Shipping Information */}
-              <ShippingInformation
-                formData={formData}
-                formErrors={formErrors}
-                handleInputChange={handleInputChange}
-              />
 
-              {/* Payment Method */}
-              <PaymentMethod
-                paymentData={paymentData}
-                onPaymentDataChange={handlePaymentDataChange}
-                onProceed={handlePaymentSuccess}
-                onOrderSubmit={handleSubmit}
-                orderId={createdOrderId}
-                totalAmount={total}
-                isFormValid={isFormValid}
-              />
-            </div>
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+          <div className="space-y-6 lg:col-span-2">
+            <ShippingInformation
+              formData={formData}
+              formErrors={showErrors ? formErrors : EMPTY_ERRORS}
+              handleInputChange={handleInputChange}
+            />
 
-            {/* Right Column - Order Summary */}
-            <div className="lg:col-span-1">
-              <div className="sticky top-8">
-                <OrderSummary
-                  cartItems={cartItems}
-                  subtotal={subtotal}
-                  shipping={shipping}
-                  tax={tax}
-                  discount={discount}
-                  total={total}
-                  promoCode={promoCode}
-                  setPromoCode={setPromoCode}
-                  applyPromoCode={applyPromoCode}
-                  appliedPromoCode={appliedPromoCode}
-                  removePromoCode={removePromoCode}
-                  isApplyingPromoCode={isApplyingPromoCode}
-                  canUsePromo={isSignedIn}
-                />
-              </div>
+            <PaymentMethod
+              paymentData={paymentData}
+              onPaymentDataChange={handlePaymentDataChange}
+            />
+          </div>
+
+          <div className="lg:col-span-1">
+            <div className="sticky top-8">
+              <OrderSummary
+                cartItems={cartItems}
+                subtotal={subtotal}
+                shipping={shipping}
+                discount={discount}
+                total={total}
+                promoCode={promoCode}
+                setPromoCode={setPromoCode}
+                applyPromoCode={applyPromoCode}
+                appliedPromoCode={appliedPromoCode}
+                removePromoCode={removePromoCode}
+                isApplyingPromoCode={isApplyingPromoCode}
+                canUsePromo={isSignedIn}
+                onConfirmOrder={handleConfirmOrder}
+                isConfirming={isConfirming}
+              />
             </div>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );

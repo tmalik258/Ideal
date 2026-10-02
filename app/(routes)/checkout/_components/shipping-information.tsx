@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -28,6 +29,31 @@ interface ShippingInformationProps {
   handleInputChange: (field: string, value: string) => void;
 }
 
+function Field({
+  id,
+  label,
+  required,
+  error,
+  children,
+}: {
+  id: string;
+  label: string;
+  required?: boolean;
+  error?: string;
+  children: ReactNode;
+}) {
+  return (
+    <div className="space-y-2">
+      <Label htmlFor={id} className="text-sm font-medium text-foreground/70">
+        {label}
+        {required ? <span className="text-red-500"> *</span> : null}
+      </Label>
+      {children}
+      {error ? <p className="text-xs text-red-500">{error}</p> : null}
+    </div>
+  );
+}
+
 export const ShippingInformation = ({
   formData,
   formErrors,
@@ -43,16 +69,13 @@ export const ShippingInformation = ({
           Shipping Information
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-6">
-        <div className="space-y-4">
-          <h3 className="font-serif text-lg font-semibold text-foreground">
+      <CardContent className="space-y-8">
+        <div className="space-y-5">
+          <h3 className="font-serif text-lg font-semibold tracking-tight text-foreground">
             Personal Information
           </h3>
 
-          <div>
-            <Label htmlFor="name" className="text-foreground/70">
-              Full Name <span className="text-red-500">*</span>
-            </Label>
+          <Field id="name" label="Full Name" required error={formErrors.name}>
             <Input
               id="name"
               type="text"
@@ -60,21 +83,21 @@ export const ShippingInformation = ({
               onChange={(e) => handleInputChange("name", e.target.value)}
               className={cn(
                 storefrontInput,
+                "h-11",
                 formErrors.name && "border-red-500 focus-visible:border-red-500"
               )}
               placeholder="John Doe"
-              required
+              autoComplete="name"
             />
-            {formErrors.name && (
-              <p className="mt-1 text-xs text-red-500">{formErrors.name}</p>
-            )}
-          </div>
+          </Field>
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <div>
-              <Label htmlFor="phone" className="text-foreground/70">
-                Phone Number <span className="text-red-500">*</span>
-              </Label>
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+            <Field
+              id="phone"
+              label="Phone Number"
+              required
+              error={formErrors.phone}
+            >
               <Input
                 id="phone"
                 type="tel"
@@ -82,19 +105,19 @@ export const ShippingInformation = ({
                 onChange={(e) => handleInputChange("phone", e.target.value)}
                 className={cn(
                   storefrontInput,
+                  "h-11",
                   formErrors.phone && "border-red-500 focus-visible:border-red-500"
                 )}
-                placeholder="(123) 456-7890"
-                required
+                placeholder="0300 1234567"
+                autoComplete="tel"
               />
-              {formErrors.phone && (
-                <p className="mt-1 text-xs text-red-500">{formErrors.phone}</p>
-              )}
-            </div>
-            <div>
-              <Label htmlFor="email" className="text-foreground/70">
-                Email Address <span className="text-red-500">*</span>
-              </Label>
+            </Field>
+            <Field
+              id="email"
+              label="Email Address"
+              required
+              error={formErrors.email}
+            >
               <Input
                 id="email"
                 type="email"
@@ -102,27 +125,22 @@ export const ShippingInformation = ({
                 onChange={(e) => handleInputChange("email", e.target.value)}
                 className={cn(
                   storefrontInput,
+                  "h-11",
                   formErrors.email && "border-red-500 focus-visible:border-red-500"
                 )}
                 placeholder="your@email.com"
-                required
+                autoComplete="email"
               />
-              {formErrors.email && (
-                <p className="mt-1 text-xs text-red-500">{formErrors.email}</p>
-              )}
-            </div>
+            </Field>
           </div>
         </div>
 
-        <div className="space-y-4">
-          <h3 className="font-serif text-lg font-semibold text-foreground">
+        <div className="space-y-5">
+          <h3 className="font-serif text-lg font-semibold tracking-tight text-foreground">
             Shipping Address
           </h3>
 
-          <div className="space-y-2">
-            <Label htmlFor="street" className="text-sm font-medium text-foreground/70">
-              Street Address <span className="text-red-500">*</span>
-            </Label>
+          <Field id="street" label="Street Address" error={formErrors.street}>
             <Input
               id="street"
               type="text"
@@ -130,21 +148,16 @@ export const ShippingInformation = ({
               onChange={(e) => handleInputChange("street", e.target.value)}
               className={cn(
                 storefrontInput,
+                "h-11",
                 formErrors.street && "border-red-500 focus-visible:border-red-500"
               )}
               placeholder="123 Main Street"
-              required
+              autoComplete="street-address"
             />
-            {formErrors.street && (
-              <p className="mt-1 text-xs text-red-500">{formErrors.street}</p>
-            )}
-          </div>
+          </Field>
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-            <div className="space-y-2">
-              <Label htmlFor="city" className="text-sm font-medium text-foreground/70">
-                City <span className="text-red-500">*</span>
-              </Label>
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <Field id="city" label="City" required error={formErrors.city}>
               <Input
                 id="city"
                 type="text"
@@ -152,20 +165,15 @@ export const ShippingInformation = ({
                 onChange={(e) => handleInputChange("city", e.target.value)}
                 className={cn(
                   storefrontInput,
+                  "h-11",
                   formErrors.city && "border-red-500 focus-visible:border-red-500"
                 )}
                 placeholder="Lahore"
-                required
+                autoComplete="address-level2"
               />
-              {formErrors.city && (
-                <p className="mt-1 text-xs text-red-500">{formErrors.city}</p>
-              )}
-            </div>
+            </Field>
 
-            <div className="space-y-2">
-              <Label htmlFor="area" className="text-sm font-medium text-foreground/70">
-                Area <span className="text-red-500">*</span>
-              </Label>
+            <Field id="area" label="Area" required error={formErrors.area}>
               <Input
                 id="area"
                 type="text"
@@ -173,20 +181,19 @@ export const ShippingInformation = ({
                 onChange={(e) => handleInputChange("area", e.target.value)}
                 className={cn(
                   storefrontInput,
+                  "h-11",
                   formErrors.area && "border-red-500 focus-visible:border-red-500"
                 )}
                 placeholder="Gulberg"
-                required
               />
-              {formErrors.area && (
-                <p className="mt-1 text-xs text-red-500">{formErrors.area}</p>
-              )}
-            </div>
+            </Field>
 
-            <div className="space-y-2">
-              <Label htmlFor="postalCode" className="text-sm font-medium text-foreground/70">
-                Postal Code <span className="text-red-500">*</span>
-              </Label>
+            <Field
+              id="postalCode"
+              label="Postal Code"
+              required
+              error={formErrors.postalCode}
+            >
               <Input
                 id="postalCode"
                 type="text"
@@ -194,15 +201,14 @@ export const ShippingInformation = ({
                 onChange={(e) => handleInputChange("postalCode", e.target.value)}
                 className={cn(
                   storefrontInput,
-                  formErrors.postalCode && "border-red-500 focus-visible:border-red-500"
+                  "h-11",
+                  formErrors.postalCode &&
+                    "border-red-500 focus-visible:border-red-500"
                 )}
-                placeholder="12345"
-                required
+                placeholder="54000"
+                autoComplete="postal-code"
               />
-              {formErrors.postalCode && (
-                <p className="mt-1 text-xs text-red-500">{formErrors.postalCode}</p>
-              )}
-            </div>
+            </Field>
           </div>
         </div>
       </CardContent>

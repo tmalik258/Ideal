@@ -16,9 +16,12 @@ export const SITE_EMAIL_NOREPLY = "noreply@ideal.com";
 export const SITE_EMAIL_ADMIN = "admin@ideal.com";
 
 export function formatStorefrontPrice(amount: number): string {
-  return `${SITE_CURRENCY} ${amount.toLocaleString("en-PK", {
+  const rounded = Math.round(amount * 100) / 100;
+  const hasFraction = Math.abs(rounded % 1) > Number.EPSILON;
+
+  return `${SITE_CURRENCY} ${rounded.toLocaleString("en-PK", {
     minimumFractionDigits: 0,
-    maximumFractionDigits: 2,
+    maximumFractionDigits: hasFraction ? 2 : 0,
   })}`;
 }
 

@@ -3,8 +3,7 @@
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Banknote } from "lucide-react";
-import { toast } from "sonner";
-import { storefrontCard, storefrontPrimaryBtn } from "@/lib/storefront/surface";
+import { storefrontCard } from "@/lib/storefront/surface";
 import { cn } from "@/lib/utils";
 
 interface PaymentMethodProps {
@@ -18,60 +17,23 @@ interface PaymentMethodProps {
     selectedPaymentType?: string;
     saveCard?: boolean;
   }) => void;
-  onProceed: () => void;
-  onOrderSubmit: (e: React.FormEvent) => Promise<string | null>;
-  orderId?: string | null;
-  totalAmount: number;
-  isFormValid?: boolean;
 }
 
 const PaymentMethod: React.FC<PaymentMethodProps> = ({
+  paymentData,
   onPaymentDataChange,
-  onProceed,
-  onOrderSubmit,
-  isFormValid,
 }) => {
-  const [selectedPaymentType] = useState("cod");
-  const [processing, setProcessing] = useState(false);
-  const [validationErrors, setValidationErrors] = useState<{
-    [key: string]: string;
-  }>({});
+  const [selectedPaymentType, setSelectedPaymentType] = useState(
+    paymentData.selectedPaymentType || "cod"
+  );
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setValidationErrors({});
-
-    if (!selectedPaymentType) {
-      setValidationErrors({ paymentMethod: "Please select a payment method" });
-      return;
-    }
-
-    setProcessing(true);
-
-    try {
-      onPaymentDataChange({
-        paymentMethod: selectedPaymentType,
-        paymentStatus: "pending",
-      });
-
-      const createdOrderId = await onOrderSubmit(e);
-      if (!createdOrderId) {
-        setValidationErrors({ general: "Failed to create order" });
-        setProcessing(false);
-        return;
-      }
-
-      toast.success("Order placed with Cash on Delivery!");
-      onProceed();
-    } catch (error) {
-      console.log("Payment error:", error);
-      setValidationErrors({
-        general: "An unexpected error occurred. Please try again.",
-      });
-      toast.error("Payment failed. Please try again.");
-    } finally {
-      setProcessing(false);
-    }
+  const selectCod = () => {
+    setSelectedPaymentType("cod");
+    onPaymentDataChange({
+      selectedPaymentType: "cod",
+      paymentMethod: "cod",
+      paymentStatus: "pending",
+    });
   };
 
   return (
@@ -84,61 +46,45 @@ const PaymentMethod: React.FC<PaymentMethodProps> = ({
           Payment Method
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-6">
-        <div>
-          <div className="space-y-4">
-            <h3 className="font-serif text-lg font-semibold text-foreground">
-              Payment Options
-            </h3>
-
-            {validationErrors.paymentMethod && (
-              <p className="text-sm text-red-600">
-                {validationErrors.paymentMethod}
-              </p>
-            )}
-
-            <div
-              className={cn(
-                "flex cursor-pointer items-center justify-between rounded-lg border border-brand-forest/15 p-4 ring-2 ring-brand-forest transition-all",
-                validationErrors.paymentMethod && "border-red-500"
-              )}
-            >
-              <div className="flex items-center space-x-3">
-                <div className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-brand-forest">
-                  <div className="h-3 w-3 rounded-full bg-brand-forest" />
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Banknote className="h-5 w-5 text-foreground/70" />
-                  <span className="text-base font-medium text-foreground">
-                    Cash on Delivery
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {validationErrors.general && (
-            <p className="mt-4 text-sm text-red-600">
-              {validationErrors.general}
-            </p>
+      <CardContent>
+        <button
+          type="button"
+          onClick={selectCod}
+          className={cn(
+            "flex w-full cursor-pointer items-start gap-4 border p-5 text-left transition-colors",
+            selectedPaymentType === "cod"
+              ? "border-brand-forest bg-brand-champagne/35"
+              : "border-brand-forest/15 bg-brand-ivory hover:border-brand-forest/40"
           )}
+        >
+          <span
+            className={cn(
+              "mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2",
+              selectedPaymentType === "cod"
+                ? "border-brand-forest"
+                : "border-brand-forest/30"
+            )}
+            aria-hidden
+          >
+            {selectedPaymentType === "cod" ? (
+              <span className="h-2.5 w-2.5 rounded-full bg-brand-forest" />
+            ) : null}
+          </span>
 
-          <div className="flex justify-center pt-6">
-            <button
-              type="button"
-              disabled={processing || !isFormValid}
-              onClick={handleSubmit}
-              className={cn(
-                storefrontPrimaryBtn,
-                "flex items-center justify-center rounded-none rounded-tr-2xl rounded-bl-2xl px-12 py-3 transition-all disabled:cursor-not-allowed disabled:opacity-50"
-              )}
-            >
-              <span className="text-base font-bold">
-                {processing ? "Processing..." : "Place Order"}
+          <span className="flex min-w-0 flex-1 items-start gap-3">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center bg-brand-forest/10 text-brand-forest">
+              <Banknote className="h-5 w-5" />
+            </span>
+            <span className="min-w-0">
+              <span className="block font-serif text-base font-semibold tracking-tight text-foreground">
+                Cash on Delivery
               </span>
-            </button>
-          </div>
-        </div>
+              <span className="mt-1 block text-sm leading-relaxed text-foreground/55">
+                Pay in cash when your order is delivered to your door.
+              </span>
+            </span>
+          </span>
+        </button>
       </CardContent>
     </Card>
   );
